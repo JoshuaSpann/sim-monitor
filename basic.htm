@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sim Monitor</title>
+	<meta charset='utf-8'/>
+</head>
+<body>
+<div statusbar>
+	<img src='res/x.svg'/> <b var-date></b><b var-time></b><img src='res/bat.svg'/><img src='res/net.svg'/><img src='res/snd.svg'/>
+</div>
+<img wav src='res/wav.svg'/>
+<div vital='HR'><input value='130'></input></div>
+<div vital='SpO2'><input value='98'></input></div>
+<div sub vital='RR'><input value='48'></input></div>
+<div sub vital='NIBP'><input value='---/---'></input></div>
+</body>
+<script>
+let varDate = document.querySelector('[var-date]')
+let varTime = document.querySelector('[var-time]')
+
+setInterval(()=>{
+	let now = new Date()
+	let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds()
+	let mm = now.getMonth()+1, dd = now.getDate(), yy = now.getFullYear()
+
+	if (h < 10) h = `0${h}`
+	if (m < 10) m = `0${m}`
+	if (s < 10) s = `0${s}`
+
+	let date = `${mm}/${dd}/${yy}`
+	let time = `${h}:${m}:${s}`
+	varDate.innerHTML = date
+	varTime.innerHTML = time
+}, 1000)
+
+let vitalsDivs = document.querySelectorAll('[vital]')
+for (let divs_i in vitalsDivs) {
+	if (isNaN(divs_i)) continue
+	let div = vitalsDivs[divs_i]
+	let b = document.createElement('b')
+	let vitalType = div.getAttribute('vital')
+	div.classList.add(vitalType.toLowerCase())
+	b.innerHTML = vitalType
+	b.onclick = ()=> {
+		if (div.classList.contains('disabled') == false) {
+			div.classList.add('disabled')
+		}
+		else {
+			div.classList.remove('disabled')
+		}
+		let input = div.querySelector('input')
+		if (input.value == '') {
+			input.value = input.getAttribute('value-last')
+			input.setAttribute('value-last', '')
+		}
+		else {
+			input.setAttribute('value-last', input.value)
+			input.value = ''
+		}
+	}
+	div.appendChild(b)
+}
+</script>
+<style>
+:root {
+	--box-big: 18vw;
+	--box-small: 8vw;
+	--color-light: #eee;
+}
+html ,
+input {
+	background: none;
+	border: none;
+	color: var(--color-light);
+}
+html {
+	background: #000;
+	font-family: 'Sans', sans-serif;
+}
+body {
+	padding: 2em 30%;
+	position: relative;
+}
+.disabled b {
+	text-decoration: line-through;
+}
+[statusbar] {
+	display: flex;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+[statusbar] * {
+	flex-grow: 100%;
+	font-size: 0.8em;
+	height: 10%;
+	margin: 0 5%;
+	max-height: 2em;
+}
+[vital] {
+	border: solid 0.3rem var(--color-light);
+	border-radius: 0.5rem;
+}
+[vital] {
+	display: inline-block;
+	height: var(--box-big);
+	position: relative;
+	vertical-align: top;
+	width: var(--box-big);
+}
+[vital] b {
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+[vital] input {
+	bottom: 0;
+	font-size: 350%;
+	height: 100%;
+	position: relative absolute;
+	right: 0;
+	text-align: center;
+	width: 100%;
+}
+[sub][vital] {
+	height: var(--box-small);
+	width: var(--box-small);
+}
+[sub][vital] input {
+	font-size: 150%;
+}
+[wav] {
+	height: 4em;
+	left: -1em;
+	overflow: hide;
+	position: absolute;
+}
+[wav] ~ * {
+	margin-top: 6em;
+}
+.hr,
+.hr * {
+	color: #4e4;
+}
+.spo2,
+.spo2 * {
+	color: #4ee;
+}
+.rr,
+.rr * {
+	color: #eee;
+}
+.nibp,
+.nibp * {
+	color: #e44;
+}
+</style>
+</html>
