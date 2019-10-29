@@ -62,7 +62,16 @@ for (let divs_i in vitalsDivs) {
 }
 </script>
 <style>
+* {
+	background: none;
+	margin: 0;
+	padding: 0;
+}
 :root {
+	--border-big: 0.2em;
+	--border-small: 0.15em;
+	--border-thick: 0.3em;
+	--border-thin: 0.1em;
 	--box-big: 18vw;
 	--box-small: 8vw;
 	--color-light: #eee;
@@ -99,11 +108,12 @@ body {
 	max-height: 2em;
 }
 [vital] {
-	border: solid 0.3rem var(--color-light);
+	border: solid var(--border-big) var(--color-light);
 	border-radius: 0.5rem;
 }
 [vital] {
 	display: inline-block;
+	float: right;
 	height: var(--box-big);
 	position: relative;
 	vertical-align: top;
@@ -116,7 +126,8 @@ body {
 }
 [vital] input {
 	bottom: 0;
-	font-size: 350%;
+	font-size: 450%;
+	font-weight: bold;
 	height: 100%;
 	position: relative absolute;
 	right: 0;
