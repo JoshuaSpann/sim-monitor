@@ -9,11 +9,108 @@
 	<img src='res/x.svg'/> <b var-date></b><b var-time></b><img src='res/bat.svg'/><img src='res/net.svg'/><img src='res/snd.svg'/>
 </div>
 <img wav src='res/wav.svg'/>
+<svg >
+  <g>
+    <!--path
+       style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 57.546874,61.804314 c 0,0 1.086145,0.191256 1.41741,0 0.850448,-0.850445 1.039434,-0.850445 1.889882,0 0.850447,0.850447 1.511906,0.755954 1.511906,0 0,-0.755952 1.01999,-22.358019 1.01999,1.766676 0,0.714059 -0.287662,-1.459569 0.633655,-1.695805 0.921317,-0.236235 1.464658,-0.0567 2.244234,-0.363801 1.32409,-0.773981 1.348788,-8.381344 3.519904,0.198437 0.566964,0.330729 0.401596,0.09449 10.37072,0.09449"
+       /-->
+    <path
+       style="fill:none;stroke:#c40000;stroke-width:1.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="
+m 57.546874,61.804314 
+h 5.41741 
+l
+1,-0.5 2,1 0.8,-10 0.2,11 0.3,-1 
+h 2
+l 1,-4 1,4 10,0.1"
+       />
+  </g>
+</svg>
+<canvas wav='hr' width='1000' height='200'></canvas>
 <div vital='HR'><input value='130'></input></div>
 <div vital='SpO2'><input value='98'></input></div>
 <div sub vital='RR'><input value='48'></input></div>
 <div sub vital='NIBP'><input value='---/---'></input></div>
 </body>
+
+<script>
+let l = console.log
+let canvasHr = document.querySelector("[wav='hr']")
+l(canvasHr)
+if (canvasHr.getContext) {
+	var ctx = canvasHr.getContext('2d')
+	ctx._containerWidth = canvasHr.offsetWidth
+	ctx._containerHeight = canvasHr.offsetHeight
+/*
+	ctx.beginPath()
+	ctx.moveTo(10,45)
+	ctx.lineTo(180,47)
+	ctx.moveTo(180,47)
+//x,y
+	ctx.lineTo(280,7)
+	ctx.lineWidth= 10
+	ctx.lineCap = 'round'
+	ctx.lineJoin = 'round'
+	ctx.strokeStyle='#e44'
+	ctx.stroke()
+*/
+
+	waveformSinus(ctx)
+}
+function waveformSinus(context) {
+	let c =context
+	c.beginPath()
+	c.lineCap = 'round'
+	c.lineJoin = 'round'
+	c.lineWidth = 30
+	c.strokeStyle = 'red'
+//x,y
+	c.moveTo(0, 200)
+//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight)
+//x1,y1,x2,y2,radius
+	//c.arcTo(100,50, 200,50, 75)
+	c.stroke()
+
+	c.beginPath()
+	c.strokeStyle = 'blue'
+	drawWave(c,[
+		//StartPoints
+		[0,c._containerHeight/2],
+		//RelativeLineDrawing (Add x-px, Add y-px)
+		[100,0],
+		[50,100],
+		[80,-200],
+		[100,100],
+		[300,0]
+	])
+	c.stroke()
+}
+function drawWave(context, coordinates, useExactCoordinates) {
+	let c = context
+	let xy_prev = coordinates[0]
+	let xy_last = xy_prev
+	for (let xy_i in coordinates) {
+		if (isNaN(xy_i) || xy_i == 0) continue
+		let xy = coordinates[xy_i]
+		let x = xy[0]
+		let y = xy[1]
+		let newX = xy_prev[0]+x
+		let newY = xy_prev[1]-y
+		if (useExactCoordinates) {
+			newX = x
+			newY = y
+		}
+		c.moveTo(xy_prev[0], xy_prev[1])
+		c.lineTo(newX, newY)
+		xy_prev = [newX,newY]
+		xy_last = [newX,newY]
+	}
+	return xy_last
+}
+</script>
+
 <script>
 let varDate = document.querySelector('[var-date]')
 let varTime = document.querySelector('[var-time]')
@@ -83,7 +180,7 @@ input {
 	color: var(--color-light);
 }
 html {
-	background: #000;
+	/*background: #000;*/
 	font-family: 'Sans', sans-serif;
 }
 body {
