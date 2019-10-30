@@ -1,0 +1,205 @@
+<!-- Learn about this code on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_animations -->
+
+<canvas id="canvas" width="300" height="300"></canvas>
+<canvas wav='hr' width='1000' height='500'></canvas>
+
+<script>
+
+var sun = new Image();
+var moon = new Image();
+var earth = new Image();
+function init() {
+  sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png';
+  moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
+  earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
+  window.requestAnimationFrame(draw);
+}
+
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  ctx.globalCompositeOperation = 'destination-over';
+  ctx.clearRect(0, 0, 300, 300); // clear canvas
+
+  ctx.save();
+  ctx.translate(150, 150);
+
+  // Earth
+  var time = new Date();
+  ctx.drawImage(earth, -12, -12);
+
+  // Moon
+  ctx.save();
+  ctx.rotate(((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds());
+  ctx.translate(0, 28.5);
+  ctx.drawImage(moon, -3.5, -3.5);
+  ctx.restore();
+  ctx.restore();
+  window.requestAnimationFrame(draw);
+}
+
+init();
+
+
+
+
+
+
+
+
+let l = console.log
+let sinusRhythmPx = {
+	amplitude: {
+		min: null,
+		max: null
+	},
+	name: 'Sinus',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		//RelativeLineDrawing (Add x-px, Add y-px)
+		[200,0],
+// Wave Peak #1
+		[50,40],
+		[50,-90],
+// Wave Peak #2
+		[20, 300],
+		[20, -350],
+// Wave balance
+		[50,100],
+		[80,0],
+// Wave peak #3
+		[50, 50],
+		[50, -50],
+// Wave Balance-end
+		[300,0]
+	]
+}
+let sinusRhythm = {
+	amplitude: {
+		min: null,
+		max: null
+	},
+	cycle: {
+		length: 100, // use JS to convert this to segment in canvas
+		height: length*0.29
+	},
+	name: 'Sinus',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		//RelativeLineDrawing (Add x-px, Add y-px)
+		[23,0],
+// Wave Peak #1
+		[6,16],
+		[6,-36],
+// Wave Peak #2
+		[2, 120],
+		[2, -140],
+// Wave balance
+		[6,40],
+		[9,0],
+// Wave peak #3
+		[6, 20],
+		[6, -20],
+// Wave Balance-end
+		[34,0]
+	]
+}
+let canvasHr = document.querySelector("[wav='hr']")
+if (canvasHr.getContext) {
+	var ctx = canvasHr.getContext('2d')
+	ctx._containerWidth = canvasHr.offsetWidth
+	ctx._containerHeight = canvasHr.offsetHeight
+console.clear()
+l(ctx._containerWidth, ctx._containerHeight)
+	waveformSinus(ctx)
+}
+function waveformSinus(context) {
+	let c =context
+	c.beginPath()
+	c.lineCap = 'round'
+	c.lineJoin = 'round'
+	c.lineWidth = 30
+	c.strokeStyle = 'red'
+
+	c.moveTo(0, 200) //x,y
+	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight) //ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+
+	//c.arcTo(100,50, 200,50, 75) //x1,y1,x2,y2,radius
+	//c.stroke()
+
+	c.beginPath()
+	sinusRhythm.pathCoordinates[0] = [0,c._containerHeight/2]
+	//drawWave(c, sinusRhythm.pathCoordinates)
+  drawWavePercent(c, sinusRhythm)
+	c.stroke()
+}
+function drawWave(context, coordinates, useExactCoordinates) {
+	let c = context
+	let xy_prev = coordinates[0]
+	let xy_last = xy_prev
+	for (let xy_i in coordinates) {
+		if (isNaN(xy_i) || xy_i == 0) continue
+		let xy = coordinates[xy_i]
+		let x = xy[0]
+		let y = xy[1]
+		let newX = xy_prev[0]+x
+		let newY = xy_prev[1]-y
+		if (useExactCoordinates) {
+			newX = x
+			newY = y
+		}
+		// TODO - Add limits to prevent drawing out of canvas/cycle max/min
+		c.moveTo(xy_prev[0], xy_prev[1])
+		c.lineTo(newX, newY)
+		xy_prev = [newX,newY]
+		xy_last = [newX,newY]
+	}
+	return xy_last
+}
+// Percent-based rework based off of width of container
+function drawWavePercent(context, waveform, useExactCoordinates) {
+	let c = context
+	c.lineWidth = 2
+	let coordinates = waveform.pathCoordinates
+	let xy_prev = coordinates[0]
+	let xy_last = xy_prev
+  
+	for (let xy_i in coordinates) {
+		if (isNaN(xy_i) || xy_i == 0) continue
+		let xy = coordinates[xy_i]
+		let x = xy[0]
+		let y = xy[1]
+		let newX = xy_prev[0]+x
+		let newY = xy_prev[1]-y
+		if (useExactCoordinates) {
+			newX = x
+			newY = y
+		}
+		// TODO - Add limits to prevent drawing out of canvas/cycle max/min
+		let xper = (x, log)=> {
+			let val = waveform.cycle.length*(x/100)
+			if (log) l('x: '+x+' '+val)
+			return val
+		}
+		let yper = (y, log)=> {
+			let val = waveform.cycle.height*(y/100)
+			if (log) l('y: '+y+' '+val)
+			return y
+		}
+		c.moveTo(
+			xper(xy_prev[0], true), 
+			yper(xy_prev[1], true)
+		)
+		c.lineTo(
+			xper(newX), 
+			yper(newY)
+		)
+		xy_prev = [newX,newY]
+		xy_last = [newX,newY]
+	}
+	return xy_last
+}
+
+</script>
