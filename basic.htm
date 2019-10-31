@@ -28,6 +28,7 @@ let sinusRhythm = {
 		length: 100, // use JS to convert this to segment in canvas
 		height: length*0.29
 	},
+	linear: false,
 	name: 'Sinus',
 	pathCoordinates: [
 		//StartPoints
@@ -79,21 +80,36 @@ let bpRhythm = {
 		length: 100,
 		height: length*0.29
 	},
+	//linear: true,
 	name: 'NIBP',
 	pathCoordinates: [
 		//StartPoints
 		[0,0],
 		// PathCoordidates
 		[2,95],
-		[2,5],
-		[2,-5],
-		[3,-25],
-		[3,-5],
-		[2,-40],
-		[2,5],
-		[2,-15],
-		[6,-5],
-		[6,-15],
+		[2,-25],
+		[2,-45],
+		[2,15],
+		[8,-40],
+	]
+}
+let rrRhythm = {
+	amplitude: 1,
+	color: '#eee',
+	cycle: {
+		length: 100,
+		height: length*0.29
+	},
+	//linear: true,
+	name: 'NIBP',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[2,95],
+		[2,0],
+		[2,-95],
+		[10,0]
 	]
 }
 
@@ -104,6 +120,7 @@ let canvasBp = document.querySelector("[wav='bp']")
 // TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
 applyWaveformStylesToContext(sinusRhythm, canvasHr)
 applyWaveformStylesToContext(oxygenRhythm, canvasO2)
+applyWaveformStylesToContext(rrRhythm, document.querySelector("[wav='rr']"))
 applyWaveformStylesToContext(bpRhythm, canvasBp)
 
 
@@ -203,6 +220,7 @@ function drawWave(context, waveform, useExactCoordinates) {
 		if (waveform.linear && waveform.linear == true) {
 			c.lineTo( xper(newX), yper(newY) )
 		}
+		else
 		//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
 		c.bezierCurveTo(
 			// Control Points
