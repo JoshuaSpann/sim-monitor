@@ -22,17 +22,6 @@ let l = console.log
 let sinusRhythm = {
 	amplitude: 1,
 	cycle: {
-/*
-		calcLength: (value)=> {
-			//if(value) l('hi')
-			let totalLength = 0
-			for (let i=0; i<pathCoordinates.length;i++) {
-				totalLength += pathCoordinates[i]
-			}
-			return totalLength
-		},
-		//length: this.calcLength, // use JS to convert this to segment in canvas
-*/
 		length: 100, // use JS to convert this to segment in canvas
 		height: length*0.29
 	},
@@ -42,26 +31,26 @@ let sinusRhythm = {
 		[0,0],
 		//RelativeLineDrawing (Add x-px, Add y-px)
 		[23,0],
-// Wave Peak #1
+	// Wave Peak #1
 		[6,16],
 		[6,-36],
-// Wave Peak #2
+	// Wave Peak #2
 		[2, 120],
 		[2, -140],
-// Wave balance
+	// Wave balance
 		[6,40],
 		[9,0],
-// Wave peak #3
+	// Wave peak #3
 		[6, 20],
 		[6, -20],
-// Wave Balance-end
+	// Wave Balance-end
 		[34,0]
 	]
 }
 let oxygenRhythm = {
 	amplitude: 1,
 	cycle: {
-		length: 100, // use JS to convert this to segment in canvas
+		length: 100,
 		height: length*0.29
 	},
 	name: 'Oxygen',
@@ -129,12 +118,6 @@ function waveformOxygen(context) {
 	c.lineJoin = 'round'
 	c.lineWidth = 2
 	c.strokeStyle = 'cyan'
-
-	c.moveTo(0, 200) //x,y
-	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight) //ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
-
-	//c.arcTo(100,50, 200,50, 75) //x1,y1,x2,y2,radius
-	//c.stroke()
 	renderWave(c, oxygenRhythm, 5)
 }
 
