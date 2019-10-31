@@ -96,40 +96,29 @@ let bpRhythm = {
 		[6,-15],
 	]
 }
+
 let canvasHr = document.querySelector("[wav='hr']")
 let canvasO2 = document.querySelector("[wav='o2']")
 let canvasBp = document.querySelector("[wav='bp']")
 
-if (canvasHr.getContext) {
-	var ctxHr = canvasHr.getContext('2d')
-	ctxHr._containerWidth = canvasHr.offsetWidth
-	ctxHr._containerHeight = canvasHr.offsetHeight
-// TODO a- Remove need for numbers here and put idea into drawWave()
-	setWaveformWidth(sinusRhythm, canvasHr.offsetWidth/5)
-
-	var ctxO2 = canvasO2.getContext('2d')
-	ctxO2._containerWidth = canvasO2.offsetWidth
-	ctxO2._containerHeight = canvasO2.offsetHeight
-	setWaveformWidth(oxygenRhythm, canvasHr.offsetWidth/5)
-
-	let ctxBp = canvasBp.getContext('2d')
-	ctxBp._containerWidth = canvasBp.offsetWidth
-	ctxBp._containerHeight = canvasBp.offsetHeight
-	setWaveformWidth(bpRhythm, canvasBp.offsetWidth/5)
-
 // TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
-	applyWaveformStylesToContext(sinusRhythm, ctxHr)
-	applyWaveformStylesToContext(oxygenRhythm, ctxO2)
-	applyWaveformStylesToContext(bpRhythm, ctxBp)
-}
+applyWaveformStylesToContext(sinusRhythm, canvasHr)
+applyWaveformStylesToContext(oxygenRhythm, canvasO2)
+applyWaveformStylesToContext(bpRhythm, canvasBp)
 
 
 /**
  * Draws the provided waveform in the given context.
  **/
-function applyWaveformStylesToContext(waveform, context) {
-	let c =context
-	c.beginPath()
+function applyWaveformStylesToContext(waveform, container) {
+	if (!container.getContext) return
+
+	let c = container.getContext('2d')
+	c._containerHeight = container.offsetHeight
+	c._containerWidth = container.offsetWidth
+	// TODO a- Remove need for numbers here and put idea into drawWave()
+	setWaveformWidth(waveform, container.offsetWidth/5)
+
 	c.lineCap = 'round'
 	c.lineJoin = 'round'
 	let waveColor = '#44f'
@@ -139,38 +128,6 @@ function applyWaveformStylesToContext(waveform, context) {
 	c.lineWidth = waveStrength
 	c.strokeStyle = waveColor
 	renderWave(c, waveform, 5)
-}
-
-/**
- * Draws a sinus HR waveform the the given context
- **/
-function waveformSinus(context) {
-	let c =context
-	c.beginPath()
-	c.lineCap = 'round'
-	c.lineJoin = 'round'
-	c.lineWidth = 2
-	c.strokeStyle = 'lime'
-
-	c.moveTo(0, 200) //x,y
-	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight)
-
-	//c.arcTo(100,50, 200,50, 75) //x1,y1,x2,y2,radius
-	//c.stroke()
-	renderWave(c, sinusRhythm, 5)
-}
-
-/**
- * Draws an oxygen waveform to the given context
- **/
-function waveformOxygen(context) {
-	let c =context
-	c.beginPath()
-	c.lineCap = 'round'
-	c.lineJoin = 'round'
-	c.lineWidth = 2
-	c.strokeStyle = 'cyan'
-	renderWave(c, oxygenRhythm, 5)
 }
 
 
