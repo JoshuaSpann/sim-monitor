@@ -10,10 +10,12 @@
 </div>
 <img wav src='res/wav.svg'/>
 <canvas wav='hr' width='1000' height='200'></canvas>
-<canvas wav='o2' width='1000' height='200'></canvas>
 <div vital='HR'><input value='130'></input></div>
+<canvas wav='o2' width='1000' height='200'></canvas>
 <div vital='SpO2'><input value='98'></input></div>
+<canvas wav='rr' width='1000' height='200'></canvas>
 <div sub vital='RR'><input value='48'></input></div>
+<canvas wav='bp' width='1000' height='200'></canvas>
 <div sub vital='NIBP'><input value='---/---'></input></div>
 </body>
 
@@ -21,6 +23,7 @@
 let l = console.log
 let sinusRhythm = {
 	amplitude: 1,
+	color: '#4f4',
 	cycle: {
 		length: 100, // use JS to convert this to segment in canvas
 		height: length*0.29
@@ -49,6 +52,7 @@ let sinusRhythm = {
 }
 let oxygenRhythm = {
 	amplitude: 1,
+	color: '#4ee',
 	cycle: {
 		length: 100,
 		height: length*0.29
@@ -68,8 +72,33 @@ let oxygenRhythm = {
 		[6,0],
 	]
 }
+let bpRhythm = {
+	amplitude: 1,
+	color: '#e44',
+	cycle: {
+		length: 100,
+		height: length*0.29
+	},
+	name: 'NIBP',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[2,95],
+		[2,5],
+		[2,-5],
+		[3,-25],
+		[3,-5],
+		[2,-40],
+		[2,5],
+		[2,-15],
+		[6,-5],
+		[6,-15],
+	]
+}
 let canvasHr = document.querySelector("[wav='hr']")
 let canvasO2 = document.querySelector("[wav='o2']")
+let canvasBp = document.querySelector("[wav='bp']")
 
 if (canvasHr.getContext) {
 	var ctxHr = canvasHr.getContext('2d')
@@ -83,11 +112,34 @@ if (canvasHr.getContext) {
 	ctxO2._containerHeight = canvasO2.offsetHeight
 	setWaveformWidth(oxygenRhythm, canvasHr.offsetWidth/5)
 
+	let ctxBp = canvasBp.getContext('2d')
+	ctxBp._containerWidth = canvasBp.offsetWidth
+	ctxBp._containerHeight = canvasBp.offsetHeight
+	setWaveformWidth(bpRhythm, canvasBp.offsetWidth/5)
+
 // TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
-	waveformSinus(ctxHr)
-	waveformOxygen(ctxO2)
+	applyWaveformStylesToContext(sinusRhythm, ctxHr)
+	applyWaveformStylesToContext(oxygenRhythm, ctxO2)
+	applyWaveformStylesToContext(bpRhythm, ctxBp)
 }
 
+
+/**
+ * Draws the provided waveform in the given context.
+ **/
+function applyWaveformStylesToContext(waveform, context) {
+	let c =context
+	c.beginPath()
+	c.lineCap = 'round'
+	c.lineJoin = 'round'
+	let waveColor = '#44f'
+	let waveStrength = 2
+	if (waveform.color) waveColor = waveform.color
+	if (waveform.strength) waveStrength = waveform.strength
+	c.lineWidth = waveStrength
+	c.strokeStyle = waveColor
+	renderWave(c, waveform, 5)
+}
 
 /**
  * Draws a sinus HR waveform the the given context
@@ -101,7 +153,7 @@ function waveformSinus(context) {
 	c.strokeStyle = 'lime'
 
 	c.moveTo(0, 200) //x,y
-	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight) //ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight)
 
 	//c.arcTo(100,50, 200,50, 75) //x1,y1,x2,y2,radius
 	//c.stroke()
@@ -191,7 +243,15 @@ function drawWave(context, waveform, useExactCoordinates) {
 			xper(xy_prev[0], true), 
 			yper(xy_prev[1], true)
 		)
-		c.lineTo(
+		if (waveform.linear && waveform.linear == true) {
+			c.lineTo( xper(newX), yper(newY) )
+		}
+		//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+		c.bezierCurveTo(
+			// Control Points
+			xper(newX-0), yper(newY+0),
+			xper(newX-2), yper(newY-0),
+			// Coordinates
 			xper(newX), 
 			yper(newY)
 		)
@@ -284,7 +344,6 @@ canvas[wav] {
 	background: black;
 	border: solid 1px #88f;
 	float: left;
-	margin: 0;
 	position: relative absolute;
 }
 .disabled b {
@@ -337,6 +396,15 @@ canvas[wav] {
 }
 [sub][vital] input {
 	font-size: 150%;
+}
+[wav] {
+	float:left;
+	height: 7em;
+}
+[vital],
+[sub][vital] {
+	height:7em;
+	width:7em;
 }
 /*
 [wav] {
