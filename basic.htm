@@ -10,6 +10,7 @@
 </div>
 <img wav src='res/wav.svg'/>
 <canvas wav='hr' width='1000' height='200'></canvas>
+<canvas wav='o2' width='1000' height='200'></canvas>
 <div vital='HR'><input value='130'></input></div>
 <div vital='SpO2'><input value='98'></input></div>
 <div sub vital='RR'><input value='48'></input></div>
@@ -19,11 +20,19 @@
 <script>
 let l = console.log
 let sinusRhythm = {
-	amplitude: {
-		min: null,
-		max: null
-	},
+	amplitude: 1,
 	cycle: {
+/*
+		calcLength: (value)=> {
+			//if(value) l('hi')
+			let totalLength = 0
+			for (let i=0; i<pathCoordinates.length;i++) {
+				totalLength += pathCoordinates[i]
+			}
+			return totalLength
+		},
+		//length: this.calcLength, // use JS to convert this to segment in canvas
+*/
 		length: 100, // use JS to convert this to segment in canvas
 		height: length*0.29
 	},
@@ -49,35 +58,118 @@ let sinusRhythm = {
 		[34,0]
 	]
 }
-let canvasHr = document.querySelector("[wav='hr']")
-if (canvasHr.getContext) {
-	var ctx = canvasHr.getContext('2d')
-	ctx._containerWidth = canvasHr.offsetWidth
-	ctx._containerHeight = canvasHr.offsetHeight
-l(ctx._containerWidth, ctx._containerHeight)
-	waveformSinus(ctx)
+let oxygenRhythm = {
+	amplitude: 1,
+	cycle: {
+		length: 100, // use JS to convert this to segment in canvas
+		height: length*0.29
+	},
+	name: 'Oxygen',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[23,0],
+		[8,100],
+		[3,0],
+		[4,-20],
+		[3,0],
+		[4,-10],
+		[6,-70],
+		[6,0],
+	]
 }
+let canvasHr = document.querySelector("[wav='hr']")
+let canvasO2 = document.querySelector("[wav='o2']")
+
+if (canvasHr.getContext) {
+	var ctxHr = canvasHr.getContext('2d')
+	ctxHr._containerWidth = canvasHr.offsetWidth
+	ctxHr._containerHeight = canvasHr.offsetHeight
+// TODO a- Remove need for numbers here and put idea into drawWave()
+	setWaveformWidth(sinusRhythm, canvasHr.offsetWidth/5)
+
+	var ctxO2 = canvasO2.getContext('2d')
+	ctxO2._containerWidth = canvasO2.offsetWidth
+	ctxO2._containerHeight = canvasO2.offsetHeight
+	setWaveformWidth(oxygenRhythm, canvasHr.offsetWidth/5)
+
+// TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
+	waveformSinus(ctxHr)
+	waveformOxygen(ctxO2)
+}
+
+
+/**
+ * Draws a sinus HR waveform the the given context
+ **/
 function waveformSinus(context) {
 	let c =context
 	c.beginPath()
 	c.lineCap = 'round'
 	c.lineJoin = 'round'
-	c.lineWidth = 3
-	c.strokeStyle = 'red'
+	c.lineWidth = 2
+	c.strokeStyle = 'lime'
 
 	c.moveTo(0, 200) //x,y
 	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight) //ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
 
 	//c.arcTo(100,50, 200,50, 75) //x1,y1,x2,y2,radius
 	//c.stroke()
-
-	c.beginPath()
-	sinusRhythm.pathCoordinates[0] = [0,c._containerHeight/2]
-	let lastCycleEndCoordinates = drawWave(c, sinusRhythm)
-	sinusRhythm.pathCoordinates[0] = lastCycleEndCoordinates
-	drawWave(c, sinusRhythm)
-	c.stroke()
+	renderWave(c, sinusRhythm, 5)
 }
+
+/**
+ * Draws an oxygen waveform to the given context
+ **/
+function waveformOxygen(context) {
+	let c =context
+	c.beginPath()
+	c.lineCap = 'round'
+	c.lineJoin = 'round'
+	c.lineWidth = 2
+	c.strokeStyle = 'cyan'
+
+	c.moveTo(0, 200) //x,y
+	c.bezierCurveTo(10,10, 10,10, c._containerWidth,c._containerHeight) //ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+
+	//c.arcTo(100,50, 200,50, 75) //x1,y1,x2,y2,radius
+	//c.stroke()
+	renderWave(c, oxygenRhythm, 5)
+}
+
+
+
+/**
+ * Adjusts waveform's total width to a given value
+ **/
+function setWaveformWidth(waveform, value) {
+	let maxX= 0
+	for (let i=0; i<waveform.pathCoordinates.length; i++) {
+		maxX+= waveform.pathCoordinates[i][0]
+	}
+	waveform.cycle.length = (value/maxX)*100
+}
+
+/**
+ * Renders the waveform to the context, repeated by the numberOfCycles.
+ **/
+function renderWave(context, waveform, numberOfCycles) {
+	context.beginPath()
+	let repeatPhaseBy = numberOfCycles
+	waveform.pathCoordinates[0] = [0,context._containerHeight/2]
+	for (let phaseNumber = 1; phaseNumber<=repeatPhaseBy; phaseNumber++) {
+		//if (phaseNumber > 1) waveform.amplitude /=phaseNumber
+		waveform.pathCoordinates[0] = drawWave(context, waveform)
+	}
+	context.stroke()
+}
+
+/**
+ * Plots the coordinate points to the context from the waveform.
+ * useExactCoordinates can be used to draw the coordinates as exact values instead of relative.
+ * Returns the relative, non-exact, coordinates for usage with looping.
+ **/
 function drawWave(context, waveform, useExactCoordinates) {
 	let c = context
 	let coordinates = waveform.pathCoordinates
@@ -86,16 +178,20 @@ function drawWave(context, waveform, useExactCoordinates) {
   
 	for (let xy_i in coordinates) {
 		if (isNaN(xy_i) || xy_i == 0) continue
+
 		let xy = coordinates[xy_i]
 		let x = xy[0]
-		let y = xy[1]
+		let y = xy[1]*waveform.amplitude
 		let newX = xy_prev[0]+x
 		let newY = xy_prev[1]-y
+
+		// Will interpret values as EXACT PIXEL locations to draw to and ignores assumed relative locations //
 		if (useExactCoordinates) {
 			newX = x
 			newY = y
 		}
-		// TODO - Add limits to prevent drawing out of canvas/cycle max/min
+
+		// Calculate the exact point location in canvas from relative (percent-based) drawing coordinates //
 		let xper = (x, log)=> {
 			let val = waveform.cycle.length*(x/100)
 			if (log) l('x: '+x+' '+val)
@@ -106,6 +202,8 @@ function drawWave(context, waveform, useExactCoordinates) {
 			if (log) l('y: '+y+' '+val)
 			return y
 		}
+
+		// Placing the coordinates uses the exact values from the calculations //
 		c.moveTo(
 			xper(xy_prev[0], true), 
 			yper(xy_prev[1], true)
@@ -114,6 +212,8 @@ function drawWave(context, waveform, useExactCoordinates) {
 			xper(newX), 
 			yper(newY)
 		)
+
+		// Values stored do not use exact locations to ensure that waveform path data keeps consistent //
 		xy_prev = [newX,newY]
 		xy_last = [newX,newY]
 	}
@@ -199,8 +299,9 @@ body {
 }
 canvas[wav] {
 	background: black;
+	border: solid 1px #88f;
 	float: left;
-	margin: 5em 0;
+	margin: 0;
 	position: relative absolute;
 }
 .disabled b {
