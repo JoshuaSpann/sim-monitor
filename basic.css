@@ -1,0 +1,110 @@
+* {
+	background: none;
+	margin: 0;
+	padding: 0;
+}
+:root {
+	--border-big: 0.2em;
+	--border-small: 0.15em;
+	--border-thick: 0.3em;
+	--border-thin: 0.1em;
+	--box-big: 18vw;
+	--box-small: 8vw;
+	--color-light: #eee;
+}
+html ,
+input {
+	background: none;
+	border: none;
+	color: var(--color-light);
+}
+html {
+	background: #000;
+	font-family: 'Sans', sans-serif;
+}
+body {
+	padding: 2em 30%;
+	position: relative;
+}
+canvas[wav] {
+	background: black;
+	border: solid var(--border-thin) var(--color-light);
+	display: inline-block;
+	width: 30vw;
+}
+.disabled b {
+	text-decoration: line-through;
+}
+[statusbar] {
+	display: flex;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+[statusbar] * {
+	flex-grow: 100%;
+	font-size: 0.8em;
+	height: 10%;
+	margin: 0 5%;
+	max-height: 2em;
+}
+[vital] {
+	border: solid var(--border-thin) var(--color-light);
+	border-radius: 0.5rem;
+}
+[vital] {
+	display: inline-block;
+	height: var(--box-big);
+	position: relative;
+	vertical-align: top;
+	width: var(--box-big);
+}
+[vital] b {
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+[vital] input {
+	bottom: 0;
+	font-size: 450%;
+	font-weight: bold;
+	height: 100%;
+	position: relative absolute;
+	right: 0;
+	text-align: center;
+	width: 100%;
+}
+[sub][vital] {
+	height: var(--box-small);
+	width: var(--box-small);
+}
+[sub][vital] input {
+	font-size: 150%;
+}
+[wav] {
+	float:left;
+	height: 7em;
+}
+[vital],
+[sub][vital] {
+	height:7em;
+	width:10em;
+}
+.hr,
+.hr * {
+	color: #4e4;
+}
+.spo2,
+.spo2 * {
+	color: #4ee;
+}
+.rr,
+.rr * {
+	color: #eee;
+}
+.nibp,
+.nibp * {
+	color: #e44;
+}
+
