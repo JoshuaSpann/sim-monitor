@@ -7,7 +7,7 @@ let sinusRhythm = {
 		height: length*0.29
 	},
 	linear: false,
-	name: 'Sinus',
+	name: 'HR Sinus',
 	pathCoordinates: [
 		//StartPoints
 		[0,0],
@@ -36,7 +36,7 @@ let oxygenRhythm = {
 		length: 100,
 		height: length*0.29
 	},
-	name: 'Oxygen',
+	name: 'SpO2',
 	pathCoordinates: [
 		//StartPoints
 		[0,0],
@@ -79,7 +79,7 @@ let rrRhythm = {
 		height: length*0.29
 	},
 	//linear: true,
-	name: 'NIBP',
+	name: 'RR',
 	pathCoordinates: [
 		//StartPoints
 		[0,0],
@@ -102,8 +102,8 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 	if (!container.getContext) return
 	let offset = 0
 	if (!animationSpeed) {
-		animationSpeed = 20
-		offset = 0
+		animationSpeed = 22
+		offset = 5
 	}
 	else {
 		offset = animationSpeed
@@ -126,20 +126,19 @@ function drawVerticalLineAt(xLocation, context, offset) {
 	let c = context
 	let lineHeight = c.canvas.height
 	let lineWidth = 20 + offset
+	let oldStrokeStyle = c.strokeStyle
 
-/*
 	// Tilted left for smoother oscilloscope effect
 	c.beginPath()
 	c.lineWidth = 20
-	let oldStrokeStyle = c.strokeStyle
 	c.strokeStyle = 'black'
 	c.moveTo(xLocation, 0)
-	c.lineTo(xLocation-c.lineWidth, lineHeight)
+	c.lineTo(xLocation-lineWidth, lineHeight)
 	c.stroke()
-*/
+
 	c.beginPath()
 	c.lineWidth = lineWidth
-	let oldStrokeStyle = c.strokeStyle
+	oldStrokeStyle = c.strokeStyle
 	oldStrokeStyle = c.strokeStyle
 	c.strokeStyle = 'black'
 	c.moveTo(xLocation, 0)
