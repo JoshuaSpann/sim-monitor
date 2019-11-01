@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sim Monitor</title>
+	<meta charset='utf-8'/>
+</head>
+<body>
+<div statusbar>
+	<img src='res/x.svg'/> <b var-date></b><b var-time></b><img src='res/bat.svg'/><img src='res/net.svg'/><img src='res/snd.svg'/>
+</div>
+<canvas wav='hr' width='1000' height='200'></canvas>
+<div vital='HR'><input value='130'></input></div>
+<canvas wav='o2' width='1000' height='200'></canvas>
+<div vital='SpO2'><input value='98'></input></div>
+<canvas wav='rr' width='1000' height='200'></canvas>
+<div sub vital='RR'><input value='48'></input></div>
+<canvas wav='bp' width='1000' height='200'></canvas>
+<div sub vital='NIBP'><input value='---/---'></input></div>
+</body>
+
+<script src='waveforms.js'></script>
+<script>
+let varDate = document.querySelector('[var-date]')
+let varTime = document.querySelector('[var-time]')
+
+setInterval(()=>{
+	let now = new Date()
+	let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds()
+	let mm = now.getMonth()+1, dd = now.getDate(), yy = now.getFullYear()
+
+	if (h < 10) h = `0${h}`
+	if (m < 10) m = `0${m}`
+	if (s < 10) s = `0${s}`
+
+	let date = `${mm}/${dd}/${yy}`
+	let time = `${h}:${m}:${s}`
+	varDate.innerHTML = date
+	varTime.innerHTML = time
+}, 1000)
+
+let vitalsDivs = document.querySelectorAll('[vital]')
+for (let divs_i in vitalsDivs) {
+	if (isNaN(divs_i)) continue
+	let div = vitalsDivs[divs_i]
+	let b = document.createElement('b')
+	let vitalType = div.getAttribute('vital')
+	div.classList.add(vitalType.toLowerCase())
+	b.innerHTML = vitalType
+	b.onclick = ()=> {
+		if (div.classList.contains('disabled') == false) {
+			div.classList.add('disabled')
+		}
+		else {
+			div.classList.remove('disabled')
+		}
+		let input = div.querySelector('input')
+		if (input.value == '') {
+			input.value = input.getAttribute('value-last')
+			input.setAttribute('value-last', '')
+		}
+		else {
+			input.setAttribute('value-last', input.value)
+			input.value = ''
+		}
+	}
+	div.appendChild(b)
+}
+</script>
+<style>
+@import 'basic.css';
+</style>
+</html>

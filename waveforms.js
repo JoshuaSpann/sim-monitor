@@ -92,16 +92,16 @@ let rrRhythm = {
 }
 
 
-applyWaveformStylesToContext(sinusRhythm, document.querySelector("[wav='hr']"))
-applyWaveformStylesToContext(oxygenRhythm, document.querySelector("[wav='o2']"))
-applyWaveformStylesToContext(rrRhythm, document.querySelector("[wav='rr']"))
-applyWaveformStylesToContext(bpRhythm, document.querySelector("[wav='bp']"))
+renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
+renderWaveInCanvas(oxygenRhythm, document.querySelector("[wav='o2']"))
+renderWaveInCanvas(rrRhythm, document.querySelector("[wav='rr']"))
+renderWaveInCanvas(bpRhythm, document.querySelector("[wav='bp']"))
 
 
 /**
  * Draws the provided waveform in the given context.
  **/
-function applyWaveformStylesToContext(waveform, container) {
+function renderWaveInCanvas(waveform, container) {
 	if (!container.getContext) return
 
 	let c = container.getContext('2d')
