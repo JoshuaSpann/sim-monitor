@@ -92,11 +92,72 @@ let rrRhythm = {
 }
 
 
-renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
-renderWaveInCanvas(oxygenRhythm, document.querySelector("[wav='o2']"))
-renderWaveInCanvas(rrRhythm, document.querySelector("[wav='rr']"))
-renderWaveInCanvas(bpRhythm, document.querySelector("[wav='bp']"))
+//renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
+animateWaveformContext(sinusRhythm, document.querySelector("[wav='hr']"))
+animateWaveformContext(oxygenRhythm, document.querySelector("[wav='o2']"))
+animateWaveformContext(rrRhythm, document.querySelector("[wav='rr']"),30)
+animateWaveformContext(bpRhythm, document.querySelector("[wav='bp']"))
 
+function animateWaveformContext(waveform, container, animationSpeed) {
+	if (!container.getContext) return
+	let offset = 0
+	if (!animationSpeed) {
+		animationSpeed = 20
+		offset = 0
+	}
+	else {
+		offset = animationSpeed
+	}
+	let c = container.getContext('2d')
+	let currentPositionX = 0
+	window.setInterval(()=>{
+		c.clearRect(0,0, c.canvas.width, c.canvas.height)
+		renderWaveInCanvas(waveform, container)
+		drawVerticalLineAt(currentPositionX, c, offset)
+		currentPositionX+=3
+		if (currentPositionX >= c.canvas.width) {
+			currentPositionX = 0
+			c.moveTo(0,0)
+		}
+	}, animationSpeed)
+}
+
+function drawVerticalLineAt(xLocation, context, offset) {
+	let c = context
+	let lineHeight = c.canvas.height
+	let lineWidth = 20 + offset
+
+/*
+	// Tilted left for smoother oscilloscope effect
+	c.beginPath()
+	c.lineWidth = 20
+	let oldStrokeStyle = c.strokeStyle
+	c.strokeStyle = 'black'
+	c.moveTo(xLocation, 0)
+	c.lineTo(xLocation-c.lineWidth, lineHeight)
+	c.stroke()
+*/
+	c.beginPath()
+	c.lineWidth = lineWidth
+	let oldStrokeStyle = c.strokeStyle
+	oldStrokeStyle = c.strokeStyle
+	c.strokeStyle = 'black'
+	c.moveTo(xLocation, 0)
+	c.lineTo(xLocation, lineHeight)
+	c.stroke()
+
+/*
+	// Lead line that's the primary wave color
+	let leadStrokeLineOffset = xLocation + c.lineWidth/2
+	c.stroke()
+	c.beginPath()
+	c.lineWidth = 2
+	c.strokeStyle = oldStrokeStyle
+	c.moveTo(leadStrokeLineOffset, 0)
+	c.lineTo(leadStrokeLineOffset, lineHeight)
+	c.stroke()
+*/
+}
 
 /**
  * Draws the provided waveform in the given context.
@@ -105,10 +166,10 @@ function renderWaveInCanvas(waveform, container) {
 	if (!container.getContext) return
 
 	let c = container.getContext('2d')
-	c._containerHeight = container.offsetHeight
-	c._containerWidth = container.offsetWidth
+	c._containerHeight = c.canvas.height
+	c._containerWidth = c.canvas.width
 	// TODO a- Remove need for numbers here and put idea into drawWave()
-	setWaveformWidth(waveform, container.offsetWidth/5)
+	setWaveformWidth(waveform, c.canvas.width)
 
 	c.lineCap = 'round'
 	c.lineJoin = 'round'
@@ -118,7 +179,8 @@ function renderWaveInCanvas(waveform, container) {
 	if (waveform.strength) waveStrength = waveform.strength
 	c.lineWidth = waveStrength
 	c.strokeStyle = waveColor
-	renderWave(c, waveform, 5)
+	renderWave(c, waveform, 13)
+	return c
 }
 
 
@@ -189,8 +251,8 @@ function drawWave(context, waveform, useExactCoordinates) {
 
 		// Placing the coordinates uses the exact values from the calculations //
 		c.moveTo(
-			xper(xy_prev[0], true), 
-			yper(xy_prev[1], true)
+			xper(xy_prev[0]),//, true), 
+			yper(xy_prev[1])//, true)
 		)
 		if (waveform.linear && waveform.linear == true) {
 			c.lineTo( xper(newX), yper(newY) )
