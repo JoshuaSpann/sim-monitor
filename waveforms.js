@@ -1,5 +1,5 @@
 let l = console.log
-let sinusRhythm = {
+let sinusWave = {
 	amplitude: 1,
 	color: '#4f4',
 	cycle: {
@@ -29,7 +29,7 @@ let sinusRhythm = {
 		[34,0]
 	]
 }
-let oxygenRhythm = {
+let oxygenWave = {
 	amplitude: 1,
 	color: '#4ee',
 	cycle: {
@@ -51,7 +51,7 @@ let oxygenRhythm = {
 		[6,0],
 	]
 }
-let bpRhythm = {
+let bpWave = {
 	amplitude: 1,
 	color: '#e44',
 	cycle: {
@@ -71,7 +71,7 @@ let bpRhythm = {
 		[8,-40],
 	]
 }
-let rrRhythm = {
+let rrWave = {
 	amplitude: 1,
 	color: '#eee',
 	cycle: {
@@ -90,13 +90,44 @@ let rrRhythm = {
 		[10,0]
 	]
 }
+let avpWave = {
+	amplitude: 1,
+	color: '#4e4',
+	cycle: {
+		length: 100,
+		height: length*0.29
+	},
+	linear: true,
+	name: 'AVP',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[2,0],
+		[0,-75],
+		[1,75],
+		[1,8],
+		[1,-8],
+		[3,-80],
+		[2,80],
+		[1,30],
+		[8,-30],
+		[20,0],
+		[0,-75],
+		[1,80],
+		[1,-5],
+		[7,10],
+		[4,-10],
+		[8,0]
+	]
+}
 
 
 //renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
-animateWaveformContext(sinusRhythm, document.querySelector("[wav='hr']"))
-animateWaveformContext(oxygenRhythm, document.querySelector("[wav='o2']"))
-animateWaveformContext(rrRhythm, document.querySelector("[wav='rr']"),30)
-animateWaveformContext(bpRhythm, document.querySelector("[wav='bp']"))
+animateWaveformContext(avpWave, document.querySelector("[wav='hr']"))
+animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
+animateWaveformContext(rrWave, document.querySelector("[wav='rr']"),30)
+animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 
 function animateWaveformContext(waveform, container, animationSpeed) {
 	if (!container.getContext) return
