@@ -97,7 +97,6 @@ let avpWave = {
 		length: 100,
 		height: length*0.29
 	},
-	linear: true,
 	name: 'AVP',
 	pathCoordinates: [
 		//StartPoints
@@ -129,6 +128,9 @@ animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
 animateWaveformContext(rrWave, document.querySelector("[wav='rr']"),30)
 animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 
+/**
+ * Renders and animates a waveform in the given canvas for the provided ms, defaults to 20ms
+ **/
 function animateWaveformContext(waveform, container, animationSpeed) {
 	if (!container.getContext) return
 	let offset = 0
@@ -153,6 +155,9 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 	}, animationSpeed)
 }
 
+/**
+ * Draws a thick vertical line at a location for animation purposes
+ **/
 function drawVerticalLineAt(xLocation, context, offset) {
 	let c = context
 	let lineHeight = c.canvas.height

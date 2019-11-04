@@ -54,10 +54,12 @@ Parameters such as curves, smoothness, and randomness are set with the waveform 
 ### Implementing
 
 To draw a waveform, declaure the object as shown in [the example](#required-object-properties-and-format).
-Then, call the API's `renderWaveInCanvas` function with the first parameter as the waveform and the second parameter as the DOM canvas element:
+If you prefer to simply draw the static waveform with no animation, call `renderWaveInCanvas`.
+If you want an animated waveform, call the API's `animateWaveformContext` function with the first parameter as the waveform, the second parameter as the DOM canvas element, and the optional third parameter for setting the animation speed (in miliseconds):
 
 ```JavaScript
 // Will apply the waveform inside of the canvas element. Safe-exits if not a canvas with a 2D context
-renderWaveInCanvas(waveform, document.querySelector('canvas')
+animateWaveformContext(waveform, document.querySelector('canvas'), 30)
+renderWaveInCanvas(waveform, document.querySelector('canvas'))
 ```
 
