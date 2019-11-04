@@ -120,10 +120,39 @@ let avpWave = {
 		[8,0]
 	]
 }
+let vfWave = {
+	amplitude: 1,
+	color: '#4e4',
+	cycle: {
+		length: 50,
+		height: length*0.29
+	},
+	name: 'VFib',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[2,0],
+		[7,14],
+		[8,-26],
+		[4,12],
+		[4,0],
+		[1,-8],
+		[3,12],
+		[6,2],
+		[4,-6],
+		[1,0],
+		[14,20],
+		[3,0],
+		[5,-35],
+		[7,15],
+		[8,0]
+	]
+}
 
 
 //renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
-animateWaveformContext(avpWave, document.querySelector("[wav='hr']"))
+animateWaveformContext(vfWave, document.querySelector("[wav='hr']"))
 animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
 animateWaveformContext(rrWave, document.querySelector("[wav='rr']"),30)
 animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
