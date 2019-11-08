@@ -163,25 +163,20 @@ animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 // [{canvas, setIntervalHandleId}]
 var waveformAnimationQueue = [];
 
+
 /**
  * Renders and animates a waveform in the given canvas for the provided ms, defaults to 20ms
  **/
 function animateWaveformContext(waveform, container, animationSpeed) {
 	if (!container.getContext) return
-	let offset = 0
-	if (!animationSpeed) {
-		animationSpeed = 22
-		offset = 5
-	}
-	else {
-		offset = animationSpeed
-	}
+	if (!animationSpeed) animationSpeed = 22 
+
 	let c = container.getContext('2d')
 	let currentPositionX = 0
 	let intervalHandle = window.setInterval(()=>{
 		c.clearRect(0,0, c.canvas.width, c.canvas.height)
 		renderWaveInCanvas(waveform, container)
-		drawVerticalLineAt(currentPositionX, c, offset)
+		drawVerticalLineAt(currentPositionX, c)
 		currentPositionX+=3
 		if (currentPositionX >= c.canvas.width) {
 			currentPositionX = 0
@@ -206,6 +201,8 @@ function animateWaveformContext(waveform, container, animationSpeed) {
  * Draws a thick vertical line at a location for animation purposes
  **/
 function drawVerticalLineAt(xLocation, context, offset) {
+	if (!offset) offset = 0
+
 	let c = context
 	let lineHeight = c.canvas.height
 	let lineWidth = 20 + offset
@@ -289,6 +286,8 @@ function drawWave(context, waveform, useExactCoordinates) {
  * Assigns select options from HR waveform with optional canvas to control
  **/
 function populateHrWaveformDropdown(select, canvas) {
+	if (!canvas) canvas = document.querySelector("[wav='hr']")
+
 	let defaultOption = document.createElement('option')
 	defaultOption.innerHTML = '--'
 	defaultOption.value = null
@@ -303,11 +302,9 @@ function populateHrWaveformDropdown(select, canvas) {
 	}
 
 	select.onchange = ()=> {
-		let targetCanvas = document.querySelector("[wav='hr']")
-		if (canvas) targetCanvas = canvas
 		for (let waveId in waveformsHr) {
 			if (select.value == waveId) {
-				animateWaveformContext(waveformsHr[waveId], targetCanvas)
+				animateWaveformContext(waveformsHr[waveId], canvas)
 			} 
 		}
 	}
@@ -319,13 +316,11 @@ function populateHrWaveformDropdown(select, canvas) {
  **/
 function renderWave(context, waveform, numberOfCycles) {
 	context.beginPath()
-	// TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
-	let repeatPhaseBy = numberOfCycles
 	waveform.pathCoordinates[0] = [0,context._containerHeight/2]
-	for (let phaseNumber = 1; phaseNumber<=repeatPhaseBy; phaseNumber++) {
-		//if (phaseNumber > 1) waveform.amplitude /=phaseNumber
+	for (let phaseNumber = 0; phaseNumber<=numberOfCycles-2; phaseNumber++) {
 		waveform.pathCoordinates[0] = drawWave(context, waveform)
 	}
+	drawWave(context, waveform)
 	context.stroke()
 }
 
@@ -350,7 +345,7 @@ function renderWaveInCanvas(waveform, container) {
 	if (waveform.strength) waveStrength = waveform.strength
 	c.lineWidth = waveStrength
 	c.strokeStyle = waveColor
-	renderWave(c, waveform, 13)
+	renderWave(c, waveform, 8)
 	return c
 }
 
