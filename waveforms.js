@@ -1,5 +1,6 @@
 let l = console.log
-let sinusWave = {
+let waveformsHr = {
+sinus : {
 	amplitude: 1,
 	color: '#4f4',
 	cycle: {
@@ -28,7 +29,68 @@ let sinusWave = {
 	// Wave Balance-end
 		[34,0]
 	]
+},
+avp : {
+	amplitude: 1,
+	color: '#4e4',
+	cycle: {
+		length: 100,
+		height: length*0.29
+	},
+	name: 'AVP',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[2,0],
+		[0,-75],
+		[1,75],
+		[1,8],
+		[1,-8],
+		[3,-80],
+		[2,80],
+		[1,30],
+		[8,-30],
+		[20,0],
+		[0,-75],
+		[1,80],
+		[1,-5],
+		[7,10],
+		[4,-10],
+		[8,0]
+	]
+},
+vf : {
+	amplitude: 1,
+	color: '#4e4',
+	cycle: {
+		length: 50,
+		height: length*0.29
+	},
+	name: 'VFib',
+	pathCoordinates: [
+		//StartPoints
+		[0,0],
+		// PathCoordidates
+		[2,0],
+		[7,14],
+		[8,-26],
+		[4,12],
+		[4,0],
+		[1,-8],
+		[3,12],
+		[6,2],
+		[4,-6],
+		[1,0],
+		[14,20],
+		[3,0],
+		[5,-35],
+		[7,15],
+		[8,0]
+	]
+},
 }
+
 let oxygenWave = {
 	amplitude: 1,
 	color: '#4ee',
@@ -90,78 +152,51 @@ let rrWave = {
 		[10,0]
 	]
 }
-let avpWave = {
-	amplitude: 1,
-	color: '#4e4',
-	cycle: {
-		length: 100,
-		height: length*0.29
-	},
-	name: 'AVP',
-	pathCoordinates: [
-		//StartPoints
-		[0,0],
-		// PathCoordidates
-		[2,0],
-		[0,-75],
-		[1,75],
-		[1,8],
-		[1,-8],
-		[3,-80],
-		[2,80],
-		[1,30],
-		[8,-30],
-		[20,0],
-		[0,-75],
-		[1,80],
-		[1,-5],
-		[7,10],
-		[4,-10],
-		[8,0]
-	]
-}
-let vfWave = {
-	amplitude: 1,
-	color: '#4e4',
-	cycle: {
-		length: 50,
-		height: length*0.29
-	},
-	name: 'VFib',
-	pathCoordinates: [
-		//StartPoints
-		[0,0],
-		// PathCoordidates
-		[2,0],
-		[7,14],
-		[8,-26],
-		[4,12],
-		[4,0],
-		[1,-8],
-		[3,12],
-		[6,2],
-		[4,-6],
-		[1,0],
-		[14,20],
-		[3,0],
-		[5,-35],
-		[7,15],
-		[8,0]
-	]
+
+let select = document.querySelector('#hrControl')
+populateHrWaveformDropdown(select)
+function populateHrWaveformDropdown(select, canvas) {
+	let defaultOption = document.createElement('option')
+	defaultOption.innerHTML = '--'
+	defaultOption.value = null
+	select.innerHTML = ''
+	select.appendChild(defaultOption)
+
+	for (let waveformHr in waveformsHr) {
+		let option = document.createElement('option')
+		option.value = waveformHr
+		option.innerHTML = waveformsHr[waveformHr].name
+		select.appendChild(option)
+	}
+
+	select.onchange = ()=> {
+		let targetCanvas = document.querySelector("[wav='hr']")
+		if (canvas) targetCanvas = canvas
+
+		targetCanvas.context = null
+		for (let waveId in waveformsHr) {
+			if (select.value == waveId){
+				animateWaveformContext(waveformsHr[waveId], targetCanvas)
+			} 
+		}
+	}
 }
 
 
 //renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
-animateWaveformContext(vfWave, document.querySelector("[wav='hr']"))
+//animateWaveformContext(waveformsHr.vf, document.querySelector("[wav='hr']"))
 animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
 animateWaveformContext(rrWave, document.querySelector("[wav='rr']"),30)
 animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 
+// [{canvas, setIntervalHandleId}]
+var waveformAnimationQueue = [];
 /**
  * Renders and animates a waveform in the given canvas for the provided ms, defaults to 20ms
  **/
 function animateWaveformContext(waveform, container, animationSpeed) {
 	if (!container.getContext) return
+	//if (intervalHandle) window.clearInterval(intervalHandle)
 	let offset = 0
 	if (!animationSpeed) {
 		animationSpeed = 22
@@ -172,7 +207,7 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 	}
 	let c = container.getContext('2d')
 	let currentPositionX = 0
-	window.setInterval(()=>{
+	let intervalHandle = window.setInterval(()=>{
 		c.clearRect(0,0, c.canvas.width, c.canvas.height)
 		renderWaveInCanvas(waveform, container)
 		drawVerticalLineAt(currentPositionX, c, offset)
@@ -182,6 +217,8 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 			c.moveTo(0,0)
 		}
 	}, animationSpeed)
+	if (waveformAnimationQueue)
+		waveformAnimationQueue.push({canvas: container, intervalId: intervalHandle})
 }
 
 /**
