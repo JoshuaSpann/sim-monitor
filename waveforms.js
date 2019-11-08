@@ -245,7 +245,8 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 		c.clearRect(0,0, c.canvas.width, c.canvas.height)
 		renderWaveInCanvas(waveform, container)
 		drawVerticalLineAt(currentPositionX, c)
-		currentPositionX+=3
+////		//currentPositionX+=3
+		currentPositionX += c.canvas.width * 0.003
 		if (currentPositionX >= c.canvas.width) {
 			currentPositionX = 0
 			c.moveTo(0,0)
@@ -271,16 +272,20 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 function drawVerticalLineAt(xLocation, context, offset) {
 	if (!offset) offset = 0
 
+	let bgColor = window.getComputedStyle(document.body, null).getPropertyValue('background-color')
 	let c = context
 	let lineHeight = c.canvas.height
 	let lineWidth = 20 + offset
+	lineWidth = context.canvas.width * 0.015
 	let oldStrokeStyle = c.strokeStyle
+
+	//xLocation = xLocation / (context.canvas.width / 1.5) *5000
 
 	c.beginPath()
 	c.lineWidth = lineWidth
 	oldStrokeStyle = c.strokeStyle
-	oldStrokeStyle = c.strokeStyle
 	c.strokeStyle = 'black'
+	if (bgColor) c.strokeStyle = bgColor
 	c.moveTo(xLocation, 0)
 	c.lineTo(xLocation, lineHeight)
 	c.stroke()
@@ -429,3 +434,6 @@ function setWaveformWidth(waveform, value) {
 	}
 	waveform.cycle.length = (value/maxX)*100
 }
+	let bgColor = (document.querySelector('html'))//.style.background
+l(bgColor)
+l(window.getComputedStyle(document.body, null).getPropertyValue('background-color'))

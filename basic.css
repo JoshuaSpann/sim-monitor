@@ -10,6 +10,7 @@
 	--border-thin: 0.1em;
 	--box-big: 18vw;
 	--box-small: 8vw;
+	--color-background: #111;
 	--color-light: #eee;
 }
 html ,
@@ -19,18 +20,19 @@ input {
 	color: var(--color-light);
 }
 html {
-	background: #000;
+	background: var(--color-background);
 	font-family: 'Sans', sans-serif;
 }
 body {
-	padding: 2em 30%;
+	background: var(--color-background);
+	padding: 4rem;
 	position: relative;
 }
 canvas[wav] {
-	background: black;
+	background: var(--color-background);
 	border: solid var(--border-thin) var(--color-light);
-	display: inline-block;
-	width: 30vw;
+	display: block;
+	height: 7em;
 }
 .disabled b {
 	text-decoration: line-through;
@@ -44,7 +46,6 @@ canvas[wav] {
 }
 [statusbar] * {
 	flex-grow: 100%;
-	font-size: 0.8em;
 	height: 10%;
 	margin: 0 5%;
 	max-height: 2em;
@@ -52,9 +53,7 @@ canvas[wav] {
 [vital] {
 	border: solid var(--border-thin) var(--color-light);
 	border-radius: 0.5rem;
-}
-[vital] {
-	display: inline-block;
+	display: block;
 	height: var(--box-big);
 	position: relative;
 	vertical-align: top;
@@ -67,7 +66,7 @@ canvas[wav] {
 }
 [vital] input {
 	bottom: 0;
-	font-size: 450%;
+	font-size: 350%;
 	font-weight: bold;
 	height: 100%;
 	position: relative absolute;
@@ -76,6 +75,7 @@ canvas[wav] {
 	width: 100%;
 }
 [sub][vital] {
+	display: inline-block;
 	height: var(--box-small);
 	width: var(--box-small);
 }
@@ -88,6 +88,7 @@ canvas[wav] {
 }
 [vital],
 [sub][vital] {
+	background: var(--color-background);
 	height:7em;
 	width:10em;
 }
@@ -107,4 +108,19 @@ canvas[wav] {
 .nibp * {
 	color: #e44;
 }
-
+.vitals-numbers,
+.vitals-waveforms {
+	display: inline;
+	top: 0;
+	width: 80%;
+}
+.vitals-numbers {
+	float: right;
+	width: 20%;
+}
+.vitals-waveforms {
+	float: left;
+}
+.vitals-waveforms * {
+	width: 100%;
+}
