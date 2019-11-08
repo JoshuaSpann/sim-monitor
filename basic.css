@@ -37,6 +37,10 @@ canvas[wav] {
 .disabled b {
 	text-decoration: line-through;
 }
+[settings] {
+	bottom: 0;
+	position: fixed;
+}
 [statusbar] {
 	display: flex;
 	left: 0;
@@ -91,6 +95,10 @@ canvas[wav] {
 	background: var(--color-background);
 	height:7em;
 	width:10em;
+}
+.hide,
+.hidden {
+	display: none;
 }
 .hr,
 .hr * {
