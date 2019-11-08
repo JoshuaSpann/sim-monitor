@@ -375,14 +375,9 @@ function populateHrWaveformDropdown(select, canvas) {
 	}
 
 	select.onchange = ()=> {
-		for (let waveId in waveformsHr) {
-			if (select.value == waveId) {
-				animateWaveformContext(waveformsHr[waveId], canvas)
-			} 
-		}
+		setCanvasWaveToSelectValue(select, canvas)
 	}
 }
-
 
 /**
  * Renders the waveform to the context, repeated by the numberOfCycles.
@@ -413,15 +408,26 @@ function renderWaveInCanvas(waveform, container) {
 	c.lineCap = 'round'
 	c.lineJoin = 'round'
 	let waveColor = '#44f'
-	let waveStrength = 2
+	let waveStrength = 3
 	if (waveform.color) waveColor = waveform.color
 	if (waveform.strength) waveStrength = waveform.strength
-	c.lineWidth = waveStrength
+	c.lineWidth = waveStrength * (container.offsetWidth / 800)
 	c.strokeStyle = waveColor
 	renderWave(c, waveform, 8)
 	return c
 }
 
+
+/**
+ * Sets the wave in a canvas based off of the select's value
+ **/
+function setCanvasWaveToSelectValue(select, canvas) {
+	for (let waveId in waveformsHr) {
+		if (select.value == waveId) {
+			animateWaveformContext(waveformsHr[waveId], canvas)
+		} 
+	}
+}
 
 
 /**
@@ -434,6 +440,9 @@ function setWaveformWidth(waveform, value) {
 	}
 	waveform.cycle.length = (value/maxX)*100
 }
-	let bgColor = (document.querySelector('html'))//.style.background
-l(bgColor)
-l(window.getComputedStyle(document.body, null).getPropertyValue('background-color'))
+
+setTimeout(()=> {
+	let select = document.querySelector('#hrControl')
+	select.selectedIndex = 1
+	setCanvasWaveToSelectValue(select, document.querySelector("[wav='hr']"))
+}, 100)
