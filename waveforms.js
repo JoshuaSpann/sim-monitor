@@ -155,6 +155,7 @@ let rrWave = {
 
 let select = document.querySelector('#hrControl')
 populateHrWaveformDropdown(select)
+
 function populateHrWaveformDropdown(select, canvas) {
 	let defaultOption = document.createElement('option')
 	defaultOption.innerHTML = '--'
@@ -183,7 +184,7 @@ function populateHrWaveformDropdown(select, canvas) {
 }
 
 
-//renderWaveInCanvas(sinusRhythm, document.querySelector("[wav='hr']"))
+//renderWaveInCanvas(waveformsHr.sinus, document.querySelector("[wav='hr']"))
 //animateWaveformContext(waveformsHr.vf, document.querySelector("[wav='hr']"))
 animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
 animateWaveformContext(rrWave, document.querySelector("[wav='rr']"),30)
@@ -196,7 +197,6 @@ var waveformAnimationQueue = [];
  **/
 function animateWaveformContext(waveform, container, animationSpeed) {
 	if (!container.getContext) return
-	//if (intervalHandle) window.clearInterval(intervalHandle)
 	let offset = 0
 	if (!animationSpeed) {
 		animationSpeed = 22
@@ -217,8 +217,17 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 			c.moveTo(0,0)
 		}
 	}, animationSpeed)
-	if (waveformAnimationQueue)
+
+	if (waveformAnimationQueue) {
 		waveformAnimationQueue.push({canvas: container, intervalId: intervalHandle})
+		for (let queue_i = 0; queue_i<waveformAnimationQueue.length; queue_i++) {
+			let animationQueue = waveformAnimationQueue[queue_i]
+			if (animationQueue.canvas = container && animationQueue.intervalId != intervalHandle) {
+				window.clearInterval(animationQueue.intervalId)
+				waveformAnimationQueue.splice(queue_i, 1)
+			}
+		}
+	}
 }
 
 /**
