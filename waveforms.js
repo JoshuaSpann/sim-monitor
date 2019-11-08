@@ -1,94 +1,94 @@
 let l = console.log
 let waveformsHr = {
-sinus : {
-	amplitude: 1,
-	color: '#4f4',
-	cycle: {
-		length: 100, // use JS to convert this to segment in canvas
-		height: length*0.29
+	sinus : {
+		amplitude: 1,
+		color: '#4f4',
+		cycle: {
+			length: 100, // use JS to convert this to segment in canvas
+			height: length*0.29
+		},
+		linear: false,
+		name: 'HR Sinus',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			//RelativeLineDrawing (Add x-px, Add y-px)
+			[23,0],
+		// Wave Peak #1
+			[6,16],
+			[6,-36],
+		// Wave Peak #2
+			[2, 120],
+			[2, -140],
+		// Wave balance
+			[6,40],
+			[9,0],
+		// Wave peak #3
+			[6, 20],
+			[6, -20],
+		// Wave Balance-end
+			[34,0]
+		]
 	},
-	linear: false,
-	name: 'HR Sinus',
-	pathCoordinates: [
-		//StartPoints
-		[0,0],
-		//RelativeLineDrawing (Add x-px, Add y-px)
-		[23,0],
-	// Wave Peak #1
-		[6,16],
-		[6,-36],
-	// Wave Peak #2
-		[2, 120],
-		[2, -140],
-	// Wave balance
-		[6,40],
-		[9,0],
-	// Wave peak #3
-		[6, 20],
-		[6, -20],
-	// Wave Balance-end
-		[34,0]
-	]
-},
-avp : {
-	amplitude: 1,
-	color: '#4e4',
-	cycle: {
-		length: 100,
-		height: length*0.29
+	avp : {
+		amplitude: 1,
+		color: '#4e4',
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'AVP',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[2,0],
+			[0,-75],
+			[1,75],
+			[1,8],
+			[1,-8],
+			[3,-80],
+			[2,80],
+			[1,30],
+			[8,-30],
+			[20,0],
+			[0,-75],
+			[1,80],
+			[1,-5],
+			[7,10],
+			[4,-10],
+			[8,0]
+		]
 	},
-	name: 'AVP',
-	pathCoordinates: [
-		//StartPoints
-		[0,0],
-		// PathCoordidates
-		[2,0],
-		[0,-75],
-		[1,75],
-		[1,8],
-		[1,-8],
-		[3,-80],
-		[2,80],
-		[1,30],
-		[8,-30],
-		[20,0],
-		[0,-75],
-		[1,80],
-		[1,-5],
-		[7,10],
-		[4,-10],
-		[8,0]
-	]
-},
-vf : {
-	amplitude: 1,
-	color: '#4e4',
-	cycle: {
-		length: 50,
-		height: length*0.29
+	vf : {
+		amplitude: 1,
+		color: '#4e4',
+		cycle: {
+			length: 50,
+			height: length*0.29
+		},
+		name: 'VFib',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[2,0],
+			[7,14],
+			[8,-26],
+			[4,12],
+			[4,0],
+			[1,-8],
+			[3,12],
+			[6,2],
+			[4,-6],
+			[1,0],
+			[14,20],
+			[3,0],
+			[5,-35],
+			[7,15],
+			[8,0]
+		]
 	},
-	name: 'VFib',
-	pathCoordinates: [
-		//StartPoints
-		[0,0],
-		// PathCoordidates
-		[2,0],
-		[7,14],
-		[8,-26],
-		[4,12],
-		[4,0],
-		[1,-8],
-		[3,12],
-		[6,2],
-		[4,-6],
-		[1,0],
-		[14,20],
-		[3,0],
-		[5,-35],
-		[7,15],
-		[8,0]
-	]
-},
 }
 
 let oxygenWave = {
@@ -154,44 +154,15 @@ let rrWave = {
 }
 
 let select = document.querySelector('#hrControl')
+
 populateHrWaveformDropdown(select)
-
-function populateHrWaveformDropdown(select, canvas) {
-	let defaultOption = document.createElement('option')
-	defaultOption.innerHTML = '--'
-	defaultOption.value = null
-	select.innerHTML = ''
-	select.appendChild(defaultOption)
-
-	for (let waveformHr in waveformsHr) {
-		let option = document.createElement('option')
-		option.value = waveformHr
-		option.innerHTML = waveformsHr[waveformHr].name
-		select.appendChild(option)
-	}
-
-	select.onchange = ()=> {
-		let targetCanvas = document.querySelector("[wav='hr']")
-		if (canvas) targetCanvas = canvas
-
-		targetCanvas.context = null
-		for (let waveId in waveformsHr) {
-			if (select.value == waveId){
-				animateWaveformContext(waveformsHr[waveId], targetCanvas)
-			} 
-		}
-	}
-}
-
-
-//renderWaveInCanvas(waveformsHr.sinus, document.querySelector("[wav='hr']"))
-//animateWaveformContext(waveformsHr.vf, document.querySelector("[wav='hr']"))
 animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
-animateWaveformContext(rrWave, document.querySelector("[wav='rr']"),30)
+animateWaveformContext(rrWave, document.querySelector("[wav='rr']"))
 animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 
 // [{canvas, setIntervalHandleId}]
 var waveformAnimationQueue = [];
+
 /**
  * Renders and animates a waveform in the given canvas for the provided ms, defaults to 20ms
  **/
@@ -230,6 +201,7 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 	}
 }
 
+
 /**
  * Draws a thick vertical line at a location for animation purposes
  **/
@@ -239,14 +211,6 @@ function drawVerticalLineAt(xLocation, context, offset) {
 	let lineWidth = 20 + offset
 	let oldStrokeStyle = c.strokeStyle
 
-	// Tilted left for smoother oscilloscope effect
-	c.beginPath()
-	c.lineWidth = 20
-	c.strokeStyle = 'black'
-	c.moveTo(xLocation, 0)
-	c.lineTo(xLocation-lineWidth, lineHeight)
-	c.stroke()
-
 	c.beginPath()
 	c.lineWidth = lineWidth
 	oldStrokeStyle = c.strokeStyle
@@ -255,19 +219,116 @@ function drawVerticalLineAt(xLocation, context, offset) {
 	c.moveTo(xLocation, 0)
 	c.lineTo(xLocation, lineHeight)
 	c.stroke()
-
-/*
-	// Lead line that's the primary wave color
-	let leadStrokeLineOffset = xLocation + c.lineWidth/2
-	c.stroke()
-	c.beginPath()
-	c.lineWidth = 2
-	c.strokeStyle = oldStrokeStyle
-	c.moveTo(leadStrokeLineOffset, 0)
-	c.lineTo(leadStrokeLineOffset, lineHeight)
-	c.stroke()
-*/
 }
+
+
+/**
+ * Plots the coordinate points to the context from the waveform.
+ * useExactCoordinates can be used to draw the coordinates as exact values instead of relative.
+ * Returns the relative, non-exact, coordinates for usage with looping.
+ **/
+function drawWave(context, waveform, useExactCoordinates) {
+	let c = context
+	let coordinates = waveform.pathCoordinates
+	let xy_prev = coordinates[0]
+	let xy_last = xy_prev
+  
+	for (let xy_i=1; xy_i<coordinates.length; xy_i++) {
+		let xy = coordinates[xy_i]
+		let x = xy[0]
+		let y = xy[1]*waveform.amplitude
+		let newX = xy_prev[0]+x
+		let newY = xy_prev[1]-y
+
+		// Will interpret values as EXACT PIXEL locations to draw and ignores assumed relative locations //
+		if (useExactCoordinates) {
+			newX = x
+			newY = y
+		}
+
+		// Calculate the exact point location in canvas from relative (percent-based) drawing coordinates //
+		let xper = (x, log)=> {
+			let val = waveform.cycle.length*(x/100)
+			if (log) l('x: '+x+' '+val)
+			return val
+		}
+		let yper = (y, log)=> {
+			let val = waveform.cycle.height*(y/100)
+			if (log) l('y: '+y+' '+val)
+			return y
+		}
+
+		// Placing the coordinates uses the exact values from the calculations //
+		c.moveTo(
+			xper(xy_prev[0]),
+			yper(xy_prev[1])
+		)
+		if (waveform.linear && waveform.linear == true) {
+			c.lineTo( xper(newX), yper(newY) )
+		}
+		else
+		//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+		c.bezierCurveTo(
+			// Control Points
+			xper(newX-0), yper(newY+0),
+			xper(newX-2), yper(newY-0),
+			// Coordinates
+			xper(newX), 
+			yper(newY)
+		)
+
+		// Values stored do not use exact locations to ensure that waveform path data keeps consistent //
+		xy_prev = [newX,newY]
+		xy_last = [newX,newY]
+	}
+	return xy_last
+}
+
+
+/**
+ * Assigns select options from HR waveform with optional canvas to control
+ **/
+function populateHrWaveformDropdown(select, canvas) {
+	let defaultOption = document.createElement('option')
+	defaultOption.innerHTML = '--'
+	defaultOption.value = null
+	select.innerHTML = ''
+	select.appendChild(defaultOption)
+
+	for (let waveformHr in waveformsHr) {
+		let option = document.createElement('option')
+		option.value = waveformHr
+		option.innerHTML = waveformsHr[waveformHr].name
+		select.appendChild(option)
+	}
+
+	select.onchange = ()=> {
+		let targetCanvas = document.querySelector("[wav='hr']")
+		if (canvas) targetCanvas = canvas
+		for (let waveId in waveformsHr) {
+			if (select.value == waveId) {
+				animateWaveformContext(waveformsHr[waveId], targetCanvas)
+			} 
+		}
+	}
+}
+
+
+/**
+ * Renders the waveform to the context, repeated by the numberOfCycles.
+ **/
+function renderWave(context, waveform, numberOfCycles) {
+	context.beginPath()
+	// TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
+	let repeatPhaseBy = numberOfCycles
+	waveform.pathCoordinates[0] = [0,context._containerHeight/2]
+	for (let phaseNumber = 1; phaseNumber<=repeatPhaseBy; phaseNumber++) {
+		//if (phaseNumber > 1) waveform.amplitude /=phaseNumber
+		waveform.pathCoordinates[0] = drawWave(context, waveform)
+	}
+	context.stroke()
+}
+
 
 /**
  * Draws the provided waveform in the given context.
@@ -305,83 +366,3 @@ function setWaveformWidth(waveform, value) {
 	}
 	waveform.cycle.length = (value/maxX)*100
 }
-
-/**
- * Renders the waveform to the context, repeated by the numberOfCycles.
- **/
-function renderWave(context, waveform, numberOfCycles) {
-	context.beginPath()
-	// TODO a- Let the waveform fill the whole container and let iterations fill up the whole container with cycles number
-	let repeatPhaseBy = numberOfCycles
-	waveform.pathCoordinates[0] = [0,context._containerHeight/2]
-	for (let phaseNumber = 1; phaseNumber<=repeatPhaseBy; phaseNumber++) {
-		//if (phaseNumber > 1) waveform.amplitude /=phaseNumber
-		waveform.pathCoordinates[0] = drawWave(context, waveform)
-	}
-	context.stroke()
-}
-
-/**
- * Plots the coordinate points to the context from the waveform.
- * useExactCoordinates can be used to draw the coordinates as exact values instead of relative.
- * Returns the relative, non-exact, coordinates for usage with looping.
- **/
-function drawWave(context, waveform, useExactCoordinates) {
-	let c = context
-	let coordinates = waveform.pathCoordinates
-	let xy_prev = coordinates[0]
-	let xy_last = xy_prev
-  
-	for (let xy_i in coordinates) {
-		if (isNaN(xy_i) || xy_i == 0) continue
-
-		let xy = coordinates[xy_i]
-		let x = xy[0]
-		let y = xy[1]*waveform.amplitude
-		let newX = xy_prev[0]+x
-		let newY = xy_prev[1]-y
-
-		// Will interpret values as EXACT PIXEL locations to draw to and ignores assumed relative locations //
-		if (useExactCoordinates) {
-			newX = x
-			newY = y
-		}
-
-		// Calculate the exact point location in canvas from relative (percent-based) drawing coordinates //
-		let xper = (x, log)=> {
-			let val = waveform.cycle.length*(x/100)
-			if (log) l('x: '+x+' '+val)
-			return val
-		}
-		let yper = (y, log)=> {
-			let val = waveform.cycle.height*(y/100)
-			if (log) l('y: '+y+' '+val)
-			return y
-		}
-
-		// Placing the coordinates uses the exact values from the calculations //
-		c.moveTo(
-			xper(xy_prev[0]),//, true), 
-			yper(xy_prev[1])//, true)
-		)
-		if (waveform.linear && waveform.linear == true) {
-			c.lineTo( xper(newX), yper(newY) )
-		}
-		else
-		//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
-		c.bezierCurveTo(
-			// Control Points
-			xper(newX-0), yper(newY+0),
-			xper(newX-2), yper(newY-0),
-			// Coordinates
-			xper(newX), 
-			yper(newY)
-		)
-
-		// Values stored do not use exact locations to ensure that waveform path data keeps consistent //
-		xy_prev = [newX,newY]
-		xy_last = [newX,newY]
-	}
-	return xy_last
-}
-
