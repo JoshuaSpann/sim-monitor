@@ -6,16 +6,29 @@
 </head>
 <body>
 <div statusbar>
+	<img settingsToggle src='res/settings.svg'/>
 	<img src='res/x.svg'/> <b var-date></b><b var-time></b><img src='res/bat.svg'/><img src='res/net.svg'/><img src='res/snd.svg'/>
 </div>
-<canvas wav='hr' width='1000' height='200'></canvas>
-<div vital='HR'><input value='130'></input></div>
-<canvas wav='o2' width='1000' height='200'></canvas>
-<div vital='SpO2'><input value='98'></input></div>
-<canvas wav='rr' width='1000' height='200'></canvas>
-<div sub vital='RR'><input value='48'></input></div>
-<canvas wav='bp' width='1000' height='200'></canvas>
-<div sub vital='NIBP'><input value='---/---'></input></div>
+
+<aside settings>
+	<label>HR Waveform</label>
+	<select vital='hr' id='hrControl'></select>
+</aside>
+
+<div class='vitals-waveforms'>
+	<canvas wav='hr' width='3000' height='200'></canvas>
+	<canvas wav='o2' width='3000' height='200'></canvas>
+	<canvas wav='rr' width='3000' height='200'></canvas>
+	<canvas wav='bp' width='3000' height='200'></canvas>
+</div>
+<div class='vitals-numbers'>
+	<div vital='HR'><input value='130'></input></div>
+	<div vital='SpO2'><input value='98'></input></div>
+	<div vital='RR'><input value='48'></input></div>
+	<div vital='NIBP'><input value='---/--'></input></div>
+	<div sub vital='Temp'><input value='98.7'></input></div>
+	<div sub vital='Pulse'><input value='130'></input></div>
+</div>
 </body>
 
 <script src='waveforms.js'></script>
@@ -64,6 +77,21 @@ for (let divs_i in vitalsDivs) {
 		}
 	}
 	div.appendChild(b)
+}
+
+let settingsTogglers = document.querySelectorAll('[settingsToggle]')
+for (let setTgl_i=0; setTgl_i<settingsTogglers.length; setTgl_i++) {
+	let settingsToggle =  settingsTogglers[setTgl_i]
+	let settingsPanel = document.querySelector('[settings]')
+	settingsToggle.onclick = ()=>{
+		if (settingsPanel.classList.contains('hide')) {
+			settingsPanel.classList.remove('hide')
+		}
+		else {
+			settingsPanel.classList.add('hide')
+		}
+	}
+	settingsPanel.classList.add('hide')
 }
 </script>
 <style>
