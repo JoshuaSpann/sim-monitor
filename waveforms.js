@@ -162,6 +162,11 @@ let waveformsHr = {
 let oxygenWave = {
 	amplitude: 1,
 	color: '#4ee',
+	curve: {
+		smooth: 4,
+		smoothX: 2,
+		smoothY: 8,
+	},
 	cycle: {
 		length: 100,
 		height: length*0.29
@@ -172,18 +177,19 @@ let oxygenWave = {
 		[0,0],
 		// PathCoordidates
 		[23,0],
-		[8,100],
-		[3,0],
-		[4,-20],
-		[3,0],
-		[4,-10],
-		[6,-70],
+		[8,90],
+		[3,-35],
+		[2,-5],
+		[5,-50],
 		[6,0],
 	]
 }
 let bpWave = {
 	amplitude: 1,
 	color: '#e44',
+	curve: {
+		strength: -4,
+	},
 	cycle: {
 		length: 100,
 		height: length*0.29
@@ -336,22 +342,66 @@ function drawWave(context, waveform, useExactCoordinates) {
 		if (waveform.linear && waveform.linear == true) {
 			c.lineTo( xper(newX), yper(newY) )
 		}
-		else
-		//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
-		c.bezierCurveTo(
-			// Control Points
-			xper(newX-0), yper(newY+0),
-			xper(newX-2), yper(newY-0),
-			// Coordinates
-			xper(newX), 
-			yper(newY)
-		)
+		else {
+			let  curveStrength = [0,-2]
+			let  xCurveStrength = curveStrength
+			let yCurveStrength = [0,0]
+			xCurveStrength = getCalculatedStrengthValues(waveform,'smoothX')
+			yCurveStrength = getCalculatedStrengthValues(waveform,'smoothY')
+			//ctrlPt1x, ctrlPt1y, cp2x, cp2y, x,y
+			c.bezierCurveTo(
+				// Control Points
+				xper(newX-xCurveStrength[0]), yper(newY-yCurveStrength[0]),
+				xper(newX-xCurveStrength[1]), yper(newY-yCurveStrength[1]),
+				// Coordinates
+				xper(newX), 
+				yper(newY)
+			)
+		}
 
 		// Values stored do not use exact locations to ensure that waveform path data keeps consistent //
 		xy_prev = [newX,newY]
 		xy_last = [newX,newY]
 	}
 	return xy_last
+}
+
+let stopLoopNum = 0
+function getCalculatedStrengthValues(waveform, curveTargetXY) {
+	let defaultStrength = [0,0]
+	let defaultCurveStrengthX = [0,-2]
+	let defaultCurveStrengthY = [0,0]
+	if (!waveform.curve) return defaultStrength
+	if (!curveTargetXY) curveTargetXY = 'smooth'
+
+	let validCurveStrengthFields = ['smooth', 'smoothX', 'smoothY']
+	for (let key in waveform.curve) {
+		let currentCurveField = waveform.curve[key]
+		if (!validCurveStrengthFields.includes(key)) {
+			continue
+		}
+
+		if (curveTargetXY && key == curveTargetXY) {
+			if (!currentCurveField.length) {
+				currentCurveField = [currentCurveField, currentCurveField]
+			}
+			defaultStrength = currentCurveField
+if(stopLoopNum < 10) {
+  l(waveform.name)
+  l(`setting ${curveTargetXY} to ${currentCurveField}`)
+  stopLoopNum++
+  l(defaultStrength)
+}
+		}//currentCurveField.length && 
+		
+/*
+		if (waveform.curve.strength) defaultStrength = waveform.curve.strength
+		if (waveform.curve.xStrength) xCurveStrength = waveform.curve.xStrength
+		if (waveform.curve.yStrength) yCurveStrength = waveform.curve.yStrength
+*/
+	}
+
+	return defaultStrength
 }
 
 
