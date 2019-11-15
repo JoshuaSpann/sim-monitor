@@ -365,12 +365,11 @@ let rrWave = {
 }
 
 let selectHr = document.querySelector('#hrControl')
-//let selectO2 = document.querySelector('#o2Control')
-populateHrWaveformDropdown(selectHr)
-//populateWaveformDropdown(selectHr, waveformsHr)
-//populateWaveformDropdown(selectO2, waveformsO2)
+let selectO2 = document.querySelector('#o2Control')
 
-animateWaveformContext(waveformsO2.normal, document.querySelector("[wav='o2']"))
+populateWaveformDropdown(selectHr, waveformsHr, document.querySelector("[wav='hr']"))
+populateWaveformDropdown(selectO2, waveformsO2, document.querySelector("[wav='o2']"))
+
 animateWaveformContext(rrWave, document.querySelector("[wav='rr']"))
 animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 
@@ -538,8 +537,11 @@ function getCalculatedStrengthValues(waveform, curveTargetXY) {
 /**
  * Assigns select options from HR waveform with optional canvas to control
  **/
-function populateHrWaveformDropdown(select, canvas) {
-	if (!canvas) canvas = document.querySelector("[wav='hr']")
+function populateWaveformDropdown(select, waveforms, canvas) {
+//function populateHrWaveformDropdown(select, canvas) {
+	if (!canvas) {
+		canvas = document.querySelector("[wav]")
+	}
 
 	let defaultOption = document.createElement('option')
 	defaultOption.innerHTML = '--'
@@ -547,15 +549,15 @@ function populateHrWaveformDropdown(select, canvas) {
 	select.innerHTML = ''
 	select.appendChild(defaultOption)
 
-	for (let waveformHr in waveformsHr) {
+	for (let waveform in waveforms) {
 		let option = document.createElement('option')
-		option.value = waveformHr
-		option.innerHTML = waveformsHr[waveformHr].name
+		option.value = waveform
+		option.innerHTML = waveforms[waveform].name
 		select.appendChild(option)
 	}
 
 	select.onchange = ()=> {
-		setCanvasWaveToSelectValue(select, canvas)
+		setCanvasWaveToSelectValue(select, waveforms, canvas)
 	}
 }
 
@@ -601,10 +603,10 @@ function renderWaveInCanvas(waveform, container) {
 /**
  * Sets the wave in a canvas based off of the select's value
  **/
-function setCanvasWaveToSelectValue(select, canvas) {
-	for (let waveId in waveformsHr) {
+function setCanvasWaveToSelectValue(select, waveforms, canvas) {
+	for (let waveId in waveforms) {
 		if (select.value == waveId) {
-			animateWaveformContext(waveformsHr[waveId], canvas)
+			animateWaveformContext(waveforms[waveId], canvas)
 		} 
 	}
 }
@@ -624,5 +626,10 @@ function setWaveformWidth(waveform, value) {
 setTimeout(()=> {
 	let select = document.querySelector('#hrControl')
 	select.selectedIndex = 1
-	setCanvasWaveToSelectValue(select, document.querySelector("[wav='hr']"))
+	setCanvasWaveToSelectValue(select, waveformsHr, document.querySelector("[wav='hr']"))
+}, 50)
+setTimeout(()=>{
+	let selectO2 = document.querySelector('#o2Control')
+	selectO2.selectedIndex = 1
+	setCanvasWaveToSelectValue(selectO2, waveformsO2, document.querySelector("[wav='o2']"))
 }, 100)
