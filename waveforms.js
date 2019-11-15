@@ -3,14 +3,10 @@ let waveformsHr = {
 	sinus : {
 		amplitude: 1,
 		color: '#4f4',
-		curve: {
-			smooth: 2,
-		},
 		cycle: {
 			length: 100, // use JS to convert this to segment in canvas
 			height: length*0.29
 		},
-		linear: false,
 		name: 'HR Sinus',
 		pathCoordinates: [
 			//StartPoints
@@ -191,13 +187,12 @@ let bpWave = {
 	amplitude: 1,
 	color: '#e44',
 	curve: {
-		smooth: -4,
+		smooth: 0.5,
 	},
 	cycle: {
 		length: 100,
 		height: length*0.29
 	},
-	//linear: true,
 	name: 'NIBP',
 	pathCoordinates: [
 		//StartPoints
@@ -217,7 +212,7 @@ let rrWave = {
 		length: 100,
 		height: length*0.29
 	},
-	//linear: true,
+	linear: true,
 	name: 'RR',
 	pathCoordinates: [
 		//StartPoints
@@ -371,7 +366,7 @@ function drawWave(context, waveform, useExactCoordinates) {
 
 let stopLoopNum = 0
 function getCalculatedStrengthValues(waveform, curveTargetXY) {
-	let defaultStrength = [0,0]
+	let defaultStrength = [2,2]
 	let defaultCurveStrengthX = [0,-2]
 	let defaultCurveStrengthY = [0,0]
 

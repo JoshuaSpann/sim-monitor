@@ -24,7 +24,7 @@ All coordinates are relative to the start point and the previous set of coordina
 #### Required Object Properties and Format
 
 To create a waveform, declare a JavaScript object and ensure that the waveform object has the following fields: `amplitude`, `cycle`, `pathCoordinates`.
-Other fields, like `color`, `linear`, and `name` are optional.
+Other fields, like `color`, `linear`, `name`, `curve` are optional.
 
 ```JavaScript
 let waveform = {
@@ -63,3 +63,23 @@ animateWaveformContext(waveform, document.querySelector('canvas'), 30)
 renderWaveInCanvas(waveform, document.querySelector('canvas'))
 ```
 
+#### The `curve` Property
+
+The `curve` prop is a special object that determines if the waveform is rendered with smoothing and curves or if it is to appear linear by default.
+
+##### Smoothness
+`curve` has 3 properties to control curve smoothness:
+- `smooth`: Sets control point smoothness along both the curve's x-axis and y-axis
+- `smoothX`: Sets control point smoothing along curve's x-axis only
+- `smoothY`: Sets control point smoothness along curve's y-axis only
+
+Each of these properties can be set as a single number or an array of 2 numbers.
+A single number applies bezier-point smoothing for both control points.
+An array applies bezier-point smoothing for each individual control point based off of its array index.
+
+#### The `linear` Property
+
+The `linear` prop controls whether to render the waveform in a linear-graph style or not.
+By default, all waveforms are assumed to have a curve to them.
+The default value is to smooth the x and y curve control points by a value of `2`.
+If `linear` is set, then it accomplishes the same thing as setting `curve.smooth` equal to `2`.
