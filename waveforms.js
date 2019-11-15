@@ -3,6 +3,9 @@ let waveformsHr = {
 	sinus : {
 		amplitude: 1,
 		color: '#4f4',
+		curve: {
+			smooth: 2,
+		},
 		cycle: {
 			length: 100, // use JS to convert this to segment in canvas
 			height: length*0.29
@@ -188,7 +191,7 @@ let bpWave = {
 	amplitude: 1,
 	color: '#e44',
 	curve: {
-		strength: -4,
+		smooth: -4,
 	},
 	cycle: {
 		length: 100,
@@ -371,6 +374,7 @@ function getCalculatedStrengthValues(waveform, curveTargetXY) {
 	let defaultStrength = [0,0]
 	let defaultCurveStrengthX = [0,-2]
 	let defaultCurveStrengthY = [0,0]
+
 	if (!waveform.curve) return defaultStrength
 	if (!curveTargetXY) curveTargetXY = 'smooth'
 
@@ -381,24 +385,13 @@ function getCalculatedStrengthValues(waveform, curveTargetXY) {
 			continue
 		}
 
-		if (curveTargetXY && key == curveTargetXY) {
-			if (!currentCurveField.length) {
-				currentCurveField = [currentCurveField, currentCurveField]
+		if (key == curveTargetXY || key == 'smooth') {
+			if (currentCurveField.length) {
+				defaultStrength = currentCurveField
+				continue
 			}
-			defaultStrength = currentCurveField
-if(stopLoopNum < 10) {
-  l(waveform.name)
-  l(`setting ${curveTargetXY} to ${currentCurveField}`)
-  stopLoopNum++
-  l(defaultStrength)
-}
-		}//currentCurveField.length && 
-		
-/*
-		if (waveform.curve.strength) defaultStrength = waveform.curve.strength
-		if (waveform.curve.xStrength) xCurveStrength = waveform.curve.xStrength
-		if (waveform.curve.yStrength) yCurveStrength = waveform.curve.yStrength
-*/
+			defaultStrength = [currentCurveField, currentCurveField]
+		}
 	}
 
 	return defaultStrength
