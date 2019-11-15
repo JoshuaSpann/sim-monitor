@@ -4,6 +4,37 @@
 
 **NOTE**: Waveforms only render inside of a canvas element!
 
+### Default Waveforms
+
+Sim Monitor comes with a few default waveforms that try to match the most common ones you'd encounter.
+As a disclaimer, these waves are gross approximations based off of common online search results.
+They may not properly match what is seen in real life.
+If there is an issue, suggest changes on the [issues page](https://github.com/JoshuaSpann/sim-monitor/issues) or make a pull request for an improved waveform.
+
+#### Heart Rhythms
+
+Heart rhythms can be accessed via the waveformsHr object.
+Currently the included waveforms are:
+- Sinus (Lead II)
+- AVP (Lead II)
+- VFib (Lead II)
+- AFib (Lead I)
+
+#### Oxygen Waves
+
+Oxygen waves can be accessed via the waveformsO2 object.
+Currently the included waveforms are:
+- Normal
+- Small & Weak
+- Large & Bounding
+- Pulsus Alternanse
+- No Dicrotic Notch
+- Chaotic
+
+---
+
+## Waveforms API
+
 ### Fields and Properties
 
 - `amplitude`: Controls the amplitude of the wave. It multiplies the y-axis values.

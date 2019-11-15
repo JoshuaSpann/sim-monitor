@@ -7,7 +7,7 @@ let waveformsHr = {
 			length: 100, // use JS to convert this to segment in canvas
 			height: length*0.29
 		},
-		name: 'HR Sinus',
+		name: 'Sinus (Lead II)',
 		pathCoordinates: [
 			//StartPoints
 			[0,0],
@@ -158,30 +158,169 @@ let waveformsHr = {
 	},
 }
 
-let oxygenWave = {
-	amplitude: 1,
-	color: '#4ee',
-	curve: {
-		smooth: 4,
-		smoothX: 2,
-		smoothY: 8,
+let waveformsO2 = {
+	normal: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Normal',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,90],
+			[3,-35],
+			[2,-5],
+			[5,-50],
+			[6,0],
+		]
 	},
-	cycle: {
-		length: 100,
-		height: length*0.29
+	small_and_weak: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Small and Weak',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,40],
+			[3,-15],
+			[1,5],
+			[2,-10],
+			[9,-20],
+			[6,0],
+		]
 	},
-	name: 'SpO2',
-	pathCoordinates: [
-		//StartPoints
-		[0,0],
-		// PathCoordidates
-		[23,0],
-		[8,90],
-		[3,-35],
-		[2,-5],
-		[5,-50],
-		[6,0],
-	]
+	large_and_bounding: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 0,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Large and Bounding',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,90],
+			[10,-65],
+			[8,-10],
+			[16,-15],
+			[6,0],
+		]
+	},
+	pulsus_alternase: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+			//TODO - cycle.span to make the wave cover x cycles in canvas! For complex waves like this, set 2 to stretch out over 2 cycles
+		},
+		name: 'Pulsus Alternanse',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[13,0],
+			[8,90],
+			[3,-35],
+			[2,-5],
+			[5,-50],
+			[6,0],
+			// PathCoordidates
+			[13,0],
+			[8,70],
+			[3,-35],
+			[2,-5],
+			[5,-30],
+			[6,0],
+		]
+	},
+	no_dicrotic_notch: {//TODO
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'No Dicrotic Notch',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,40],
+			[3,-15],
+			[1,5],
+			[2,-10],
+			[9,-20],
+			[6,0],
+		]
+	},
+	chaotic: {//TODO
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Chaotic',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,40],
+			[3,-15],
+			[1,5],
+			[2,-10],
+			[9,-20],
+			[6,0],
+		]
+	},
+
 }
 let bpWave = {
 	amplitude: 1,
@@ -225,10 +364,13 @@ let rrWave = {
 	]
 }
 
-let select = document.querySelector('#hrControl')
+let selectHr = document.querySelector('#hrControl')
+//let selectO2 = document.querySelector('#o2Control')
+populateHrWaveformDropdown(selectHr)
+//populateWaveformDropdown(selectHr, waveformsHr)
+//populateWaveformDropdown(selectO2, waveformsO2)
 
-populateHrWaveformDropdown(select)
-animateWaveformContext(oxygenWave, document.querySelector("[wav='o2']"))
+animateWaveformContext(waveformsO2.normal, document.querySelector("[wav='o2']"))
 animateWaveformContext(rrWave, document.querySelector("[wav='rr']"))
 animateWaveformContext(bpWave, document.querySelector("[wav='bp']"))
 
