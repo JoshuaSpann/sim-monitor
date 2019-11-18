@@ -95,7 +95,8 @@ Waveforms.Hr = {
 		color: '#4e4',
 		cycle: {
 			length: 50,
-			height: length*0.29
+			height: length*0.29,
+			span: 4,
 		},
 		name: 'AFib',
 		pathCoordinates: [
@@ -246,8 +247,9 @@ Waveforms.O2 = {
 		},
 		cycle: {
 			length: 100,
-			height: length*0.29
+			height: length*0.29,
 			//TODO - cycle.span to make the wave cover x cycles in canvas! For complex waves like this, set 2 to stretch out over 2 cycles
+			span: 2,
 		},
 		name: 'Pulsus Alternanse',
 		pathCoordinates: [

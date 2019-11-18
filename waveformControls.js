@@ -101,6 +101,7 @@ function drawWave(context, waveform, useExactCoordinates) {
 		// Calculate the exact point location in canvas from relative (percent-based) drawing coordinates //
 		let xper = (x, log)=> {
 			let val = waveform.cycle.length*(x/100)
+			if (waveform.cycle.span) val = val*waveform.cycle.span
 			if (log) l('x: '+x+' '+val)
 			return val
 		}
