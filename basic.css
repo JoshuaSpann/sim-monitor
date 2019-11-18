@@ -42,6 +42,10 @@ canvas[wav] {
 	bottom: 0;
 	position: fixed;
 }
+[settingsToggle]:hover,
+select:hover {
+	cursor: pointer;
+}
 [statusbar] {
 	display: flex;
 	left: 0;

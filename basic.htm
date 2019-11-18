@@ -3,6 +3,7 @@
 <head>
 	<title>Sim Monitor</title>
 	<meta charset='utf-8'/>
+	<link rel='icon' href='res/ico.svg'/>
 </head>
 <body>
 <div statusbar>
@@ -88,9 +89,11 @@ for (let setTgl_i=0; setTgl_i<settingsTogglers.length; setTgl_i++) {
 	settingsToggle.onclick = ()=>{
 		if (settingsPanel.classList.contains('hide')) {
 			settingsPanel.classList.remove('hide')
+			settingsToggle.src = 'res/settings-cancel.svg'
 		}
 		else {
 			settingsPanel.classList.add('hide')
+			settingsToggle.src = 'res/settings.svg'
 		}
 	}
 	settingsPanel.classList.add('hide')

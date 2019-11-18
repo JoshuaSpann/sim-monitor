@@ -1,5 +1,6 @@
 # Sim-Monitor
 
+![Sim Monitor Logo](res/ico.svg)
 A customizable, web-based simulation monitor for vital signs.
 
 ## Documentation
