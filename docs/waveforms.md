@@ -108,9 +108,22 @@ Each of these properties can be set as a single number or an array of 2 numbers.
 A single number applies bezier-point smoothing for both control points.
 An array applies bezier-point smoothing for each individual control point based off of its array index.
 
+#### The `cycle` Property
+
+The `cycle` prop is used to specify the cycle/phase length properties that draw the waveform.
+There are 2 mandatory sub-properties and the rest are optional:
+- `height`: The height of the waveform cycle when drawn in the canvas, based on the length
+- `length`: The length of the waveform cycle when drawn in the canvas
+- `span`: Squashes/stretches how many cycles the waveform's path should cover
+    - ![Two waveforms with the same, default cycle length](img/waveform.cycle.span=0.png)
+    - ![The same two waveforms with the same cycle length, but the second's cycle.span=2](img/waveform.cycle.span=2.png)
+
 #### The `linear` Property
 
 The `linear` prop controls whether to render the waveform in a linear-graph style or not.
 By default, all waveforms are assumed to have a curve to them.
+![A waveform with the default curve assigned](img/waveform.linear=false.png)
+
 The default value is to smooth the x and y curve control points by a value of `2`.
-If `linear` is set, then it accomplishes the same thing as setting `curve.smooth` equal to `2`.
+If `linear` is set, then it accomplishes the same thing as setting `curve.smooth` equal to `0`.
+![The same waveform but with linear set to true](img/waveform.linear=true.png)
