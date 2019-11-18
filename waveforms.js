@@ -390,7 +390,6 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 		c.clearRect(0,0, c.canvas.width, c.canvas.height)
 		renderWaveInCanvas(waveform, container)
 		drawVerticalLineAt(currentPositionX, c)
-////		//currentPositionX+=3
 		currentPositionX += c.canvas.width * 0.003
 		if (currentPositionX >= c.canvas.width) {
 			currentPositionX = 0
@@ -402,7 +401,7 @@ function animateWaveformContext(waveform, container, animationSpeed) {
 		waveformAnimationQueue.push({canvas: container, intervalId: intervalHandle})
 		for (let queue_i = 0; queue_i<waveformAnimationQueue.length; queue_i++) {
 			let animationQueue = waveformAnimationQueue[queue_i]
-			if (animationQueue.canvas = container && animationQueue.intervalId != intervalHandle) {
+			if (animationQueue.canvas == container && animationQueue.intervalId != intervalHandle) {
 				window.clearInterval(animationQueue.intervalId)
 				waveformAnimationQueue.splice(queue_i, 1)
 			}
