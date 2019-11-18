@@ -29,16 +29,392 @@
 	<canvas wav='bp' width='3000' height='200'></canvas>
 </div>
 <div class='vitals-numbers'>
-	<div vital='HR'><input value='130'></input></div>
+	<div vital='HR'><input value='90'></input></div>
 	<div vital='SpO2'><input value='98'></input></div>
-	<div vital='RR'><input value='48'></input></div>
-	<div vital='NIBP'><input value='---/--'></input></div>
+	<div vital='RR'><input value='16'></input></div>
+	<div vital='NIBP'><input value='120/80'></input></div>
 	<div sub vital='Temp'><input value='98.7'></input></div>
-	<div sub vital='Pulse'><input value='130'></input></div>
+	<div sub vital='Pulse'><input value='90'></input></div>
 </div>
 </body>
 
-<script src='waveforms.js'></script>
+<script>
+let l = console.log
+let Waveforms = {}
+
+Waveforms.Hr = {
+	sinus : {
+		amplitude: 1,
+		color: '#4f4',
+		cycle: {
+			length: 100, // use JS to convert this to segment in canvas
+			height: length*0.29
+		},
+		name: 'Sinus (Lead II)',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			//RelativeLineDrawing (Add x-px, Add y-px)
+			[23,0],
+		// Wave Peak #1
+			[6,16],
+			[6,-36],
+		// Wave Peak #2
+			[2, 120],
+			[2, -140],
+		// Wave balance
+			[6,40],
+			[9,0],
+		// Wave peak #3
+			[6, 20],
+			[6, -20],
+		// Wave Balance-end
+			[34,0]
+		]
+	},
+	avpaced : {
+		amplitude: 1,
+		color: '#4e4',
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'AVP',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[2,0],
+			[0,-75],
+			[1,75],
+			[1,8],
+			[1,-8],
+			[3,-80],
+			[2,80],
+			[1,30],
+			[8,-30],
+			[20,0],
+			[0,-75],
+			[1,80],
+			[1,-5],
+			[7,10],
+			[4,-10],
+			[8,0]
+		]
+	},
+	vfib : {
+		amplitude: 1,
+		color: '#4e4',
+		cycle: {
+			length: 50,
+			height: length*0.29
+		},
+		name: 'VFib',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[2,0],
+			[7,14],
+			[8,-26],
+			[4,12],
+			[4,0],
+			[1,-8],
+			[3,12],
+			[6,2],
+			[4,-6],
+			[1,0],
+			[14,20],
+			[3,0],
+			[5,-35],
+			[7,15],
+			[8,0]
+		]
+	},
+	afib: {
+		amplitude: 1,
+		color: '#4e4',
+		cycle: {
+			length: 50,
+			height: length*0.29,
+			span: 4,
+		},
+		name: 'AFib',
+		pathCoordinates: [
+			// StartPoints
+			[0,0],
+			// PathCoordidates
+			[7,0],
+				[2,10],
+				[4,-10],
+				[1,3],
+				[2,-3],
+				[1,8],
+				[2,-8],
+				[1,16],
+				[3,-16],
+				[10,0],
+				[1,16],
+				[3,-16],
+				[7,1],
+				[3,-6],
+			[3,5],
+			[6,16],
+				[10,-36],
+			[4, 120],
+				[16, -140],
+			[6,40],
+				[9,0],
+			[6, 20],
+				[6, -20],
+			[2, 40],
+				[1, -40],
+				[1,16],
+				[3,-16],
+				[10,0],
+				[1,16],
+				[3,-16],
+			[2,30],
+				[1,-50],
+			[4, 80],
+				[10, -100],
+				[8, 50],
+				[20, -50],
+				[6,40],
+				[9,0],
+			[8, 20],
+				[19, -20],
+				[7, 9],
+				[10, -9],
+				[5, 15],
+				[12, -15],
+				[7,0],
+				[1,8],
+				[2,-8],
+				[1,16],
+				[3,-16],
+				[2,10],
+				[4,-10],
+				[10,0],
+			[4, 120],
+			[16, -120],
+		]
+	},
+}
+Waveforms.O2 = {
+	normal: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Normal',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,90],
+			[3,-35],
+			[2,-5],
+			[5,-50],
+			[6,0],
+		]
+	},
+	small_and_weak: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Small and Weak',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,40],
+			[3,-15],
+			[1,5],
+			[2,-10],
+			[9,-20],
+			[6,0],
+		]
+	},
+	large_and_bounding: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 0,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Large and Bounding',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,90],
+			[10,-65],
+			[8,-10],
+			[16,-15],
+			[6,0],
+		]
+	},
+	pulsus_alternase: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29,
+			span: 2,
+		},
+		name: 'Pulsus Alternanse',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[13,0],
+			[8,90],
+			[3,-35],
+			[2,-5],
+			[5,-50],
+			[6,0],
+			// PathCoordidates
+			[13,0],
+			[8,70],
+			[3,-35],
+			[2,-5],
+			[5,-30],
+			[6,0],
+		]
+	},
+	no_dicrotic_notch: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'No Dicrotic Notch',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[8,90],
+			[10,-90],
+			[6,0],
+		]
+	},
+	chaotic: {
+		amplitude: 1,
+		color: '#4ee',
+		curve: {
+			smooth: 4,
+			smoothX: 2,
+			smoothY: 8,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Chaotic',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[23,0],
+			[9,-20],
+			[8,40],
+			[3,-15],
+			[2,-10],
+			[1,5],
+			[6,0],
+
+			[9,-20],
+			[3,-15],
+			[6,0],
+			[2,-10],
+			[23,0],
+			[8,40],
+			[1,5],
+		]
+	},
+
+}
+Waveforms.Bp = {
+	normal: {
+		amplitude: 1,
+		color: '#e44',
+		curve: {
+			smooth: 0.5,
+		},
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Normal Artline',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[2,95],
+			[2,-25],
+			[2,-45],
+			[2,15],
+			[8,-40],
+		]
+	},
+}
+Waveforms.Rr = {
+	basic: {
+		amplitude: 1,
+		color: '#eee',
+		cycle: {
+			length: 100,
+			height: length*0.29
+		},
+		name: 'Basic RR',
+		pathCoordinates: [
+			//StartPoints
+			[0,0],
+			// PathCoordidates
+			[2,95],
+			[2,0],
+			[2,-95],
+			[10,0]
+		]
+	},
+}
+</script>
 <script>
 let selectHr = document.querySelector('#hrControl')
 let selectO2 = document.querySelector('#o2Control')
@@ -49,6 +425,9 @@ populateWaveformDropdown(selectHr, Waveforms.Hr, document.querySelector("[wav='h
 populateWaveformDropdown(selectO2, Waveforms.O2, document.querySelector("[wav='o2']"))
 populateWaveformDropdown(selectRr, Waveforms.Rr, document.querySelector("[wav='rr']"))
 populateWaveformDropdown(selectBp, Waveforms.Bp, document.querySelector("[wav='bp']"))
+
+//animateWaveformContext(Waveforms.Rr, document.querySelector("[wav='rr']"))
+//animateWaveformContext(Waveforms.Bp, document.querySelector("[wav='bp']"))
 
 // [{canvas, setIntervalHandleId}]
 var waveformAnimationQueue = [];
@@ -100,6 +479,8 @@ function drawVerticalLineAt(xLocation, context, offset) {
 	lineWidth = context.canvas.width * 0.015
 	let oldStrokeStyle = c.strokeStyle
 
+	//xLocation = xLocation / (context.canvas.width / 1.5) *5000
+
 	c.beginPath()
 	c.lineWidth = lineWidth
 	oldStrokeStyle = c.strokeStyle
@@ -138,6 +519,7 @@ function drawWave(context, waveform, useExactCoordinates) {
 		// Calculate the exact point location in canvas from relative (percent-based) drawing coordinates //
 		let xper = (x, log)=> {
 			let val = waveform.cycle.length*(x/100)
+			if (waveform.cycle.span) val = val*waveform.cycle.span
 			if (log) l('x: '+x+' '+val)
 			return val
 		}
@@ -258,6 +640,7 @@ function renderWaveInCanvas(waveform, container) {
 	let c = container.getContext('2d')
 	c._containerHeight = c.canvas.height
 	c._containerWidth = c.canvas.width
+	// TODO a- Remove need for numbers here and put idea into drawWave()
 	setWaveformWidth(waveform, c.canvas.width)
 
 	c.lineCap = 'round'
@@ -380,145 +763,6 @@ for (let setTgl_i=0; setTgl_i<settingsTogglers.length; setTgl_i++) {
 }
 </script>
 <style>
-* {
-	background: none;
-	margin: 0;
-	padding: 0;
-}
-:root {
-	--border-big: 0.2em;
-	--border-small: 0.15em;
-	--border-thick: 0.3em;
-	--border-thin: 0.1em;
-	--box-big: 18vw;
-	--box-small: 8vw;
-	--color-background: #111;
-	--color-light: #eee;
-}
-html ,
-input {
-	background: none;
-	border: none;
-	color: var(--color-light);
-}
-html {
-	background: var(--color-background);
-	font-family: 'Sans', sans-serif;
-}
-body {
-	background: var(--color-background);
-	padding: 4rem;
-	padding-top: 10%;
-	position: relative;
-}
-canvas[wav] {
-	background: var(--color-background);
-	border: solid var(--border-thin) var(--color-light);
-	display: block;
-	height: 7em;
-}
-.disabled b {
-	text-decoration: line-through;
-}
-[settings] {
-	bottom: 0;
-	position: fixed;
-}
-[settingsToggle]:hover,
-select:hover {
-	cursor: pointer;
-}
-[statusbar] {
-	display: flex;
-	left: 0;
-	padding-top: 2em;
-	position: fixed;
-	top: 0;
-	width: 100%;
-}
-[statusbar] * {
-	flex-grow: 100%;
-	height: 10%;
-	margin: 0 5%;
-	max-height: 2em;
-}
-[vital] {
-	border: solid var(--border-thin) var(--color-light);
-	border-radius: 0.5rem;
-	display: block;
-	height: var(--box-big);
-	position: relative;
-	vertical-align: top;
-	width: var(--box-big);
-}
-[vital] b {
-	left: 0;
-	position: absolute;
-	top: 0;
-}
-[vital] input {
-	bottom: 0;
-	font-size: 350%;
-	font-weight: bold;
-	height: 100%;
-	position: relative absolute;
-	right: 0;
-	text-align: center;
-	width: 100%;
-}
-[sub][vital] {
-	display: inline-block;
-	height: var(--box-small);
-	width: var(--box-small);
-}
-[sub][vital] input {
-	font-size: 150%;
-}
-[wav] {
-	float:left;
-	height: 7em;
-}
-[vital],
-[sub][vital] {
-	background: var(--color-background);
-	height:7em;
-	width:10em;
-}
-.hide,
-.hidden {
-	display: none;
-}
-.hr,
-.hr * {
-	color: #4e4;
-}
-.spo2,
-.spo2 * {
-	color: #4ee;
-}
-.rr,
-.rr * {
-	color: #eee;
-}
-.nibp,
-.nibp * {
-	color: #e44;
-}
-.vitals-numbers,
-.vitals-waveforms {
-	display: inline;
-	top: 0;
-	width: 80%;
-}
-.vitals-numbers {
-	float: right;
-	width: 20%;
-}
-.vitals-waveforms {
-	float: left;
-}
-.vitals-waveforms * {
-	width: 100%;
-}
+@import 'basic.css';
 </style>
 </html>

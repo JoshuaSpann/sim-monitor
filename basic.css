@@ -122,6 +122,9 @@ select:hover {
 .nibp * {
 	color: #e44;
 }
+.nibp input {
+	font-size: 180%;
+}
 .vitals-numbers,
 .vitals-waveforms {
 	display: inline;
