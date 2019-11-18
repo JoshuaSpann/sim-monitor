@@ -13,23 +13,35 @@ If there is an issue, suggest changes on the [issues page](https://github.com/Jo
 
 #### Heart Rhythms
 
-Heart rhythms can be accessed via the waveformsHr object.
+Heart rhythms can be accessed via the Waveforms.Hr object.
 Currently the included waveforms are:
-- Sinus (Lead II)
-- AVP (Lead II)
-- VFib (Lead II)
-- AFib (Lead I)
+- `sinus`: Sinus (Lead II)
+- `avpaced`: AVPacemaker (Lead II)
+- `vfib`: VFib (Lead II)
+- `afib`: AFib (Lead I)
 
 #### Oxygen Waves
 
-Oxygen waves can be accessed via the waveformsO2 object.
+Oxygen waves can be accessed via the Waveforms.O2 object.
 Currently the included waveforms are:
-- Normal
-- Small & Weak
-- Large & Bounding
-- Pulsus Alternanse
-- No Dicrotic Notch
-- Chaotic
+- `normal`: Normal
+- `small_and_weak`: Small & Weak
+- `large_and_bounding`: Large & Bounding
+- `pulsus_alternase`: Pulsus Alternanse
+- `no_dicrotic_notch`: No Dicrotic Notch
+- `chaotic`: Chaotic
+
+#### Respiratory Waves
+
+Respiratory waves can be accessed via the Waveforms.Rr object.
+Currently the included waveforms are:
+- `basic`: Basic semi-square waveform
+
+#### Blood Pressure Waves
+
+Blood Pressure waves can be accessed via the Waveforms.Bp object.
+Currently the included waveforms are:
+- `normal`: Normal Artline
 
 ---
 

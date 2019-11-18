@@ -248,7 +248,6 @@ Waveforms.O2 = {
 		cycle: {
 			length: 100,
 			height: length*0.29,
-			//TODO - cycle.span to make the wave cover x cycles in canvas! For complex waves like this, set 2 to stretch out over 2 cycles
 			span: 2,
 		},
 		name: 'Pulsus Alternanse',
@@ -271,7 +270,7 @@ Waveforms.O2 = {
 			[6,0],
 		]
 	},
-	no_dicrotic_notch: {//TODO
+	no_dicrotic_notch: {
 		amplitude: 1,
 		color: '#4ee',
 		curve: {
@@ -294,7 +293,7 @@ Waveforms.O2 = {
 			[6,0],
 		]
 	},
-	chaotic: {//TODO
+	chaotic: {
 		amplitude: 1,
 		color: '#4ee',
 		curve: {
@@ -341,7 +340,7 @@ Waveforms.Bp = {
 			length: 100,
 			height: length*0.29
 		},
-		name: 'Normal',
+		name: 'Normal Artline',
 		pathCoordinates: [
 			//StartPoints
 			[0,0],
@@ -355,15 +354,14 @@ Waveforms.Bp = {
 	},
 }
 Waveforms.Rr = {
-	normal: {
+	basic: {
 		amplitude: 1,
 		color: '#eee',
 		cycle: {
 			length: 100,
 			height: length*0.29
 		},
-		linear: true,
-		name: 'RR',
+		name: 'Basic RR',
 		pathCoordinates: [
 			//StartPoints
 			[0,0],
