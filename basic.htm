@@ -16,6 +16,10 @@
 	<select vital='hr' id='hrControl'></select>
 	<label>SpO<sub>2</sub> Waveform</label>
 	<select vital='spo2' id='o2Control'></select>
+	<label>RR Waveform</label>
+	<select vital='rr' id='rrControl'></select>
+	<label>ABP Waveform</label>
+	<select vital='bp' id='bpControl'></select>
 </aside>
 
 <div class='vitals-waveforms'>
@@ -35,6 +39,7 @@
 </body>
 
 <script src='waveforms.js'></script>
+<script src='waveformControls.js'></script>
 <script>
 let varDate = document.querySelector('[var-date]')
 let varTime = document.querySelector('[var-time]')
