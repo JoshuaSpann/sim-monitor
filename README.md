@@ -2,7 +2,7 @@
 
 A customizable, web-based simulation monitor for vital signs.
 It is built to run with HTML5, CSS3, and ECMAScript 5.
-You can view the demo [here](https://www.joshuaspann.com/sim-monitor)!
+You can view the demo [here](http://www.joshuaspann.com/sim-monitor)!
 
 Tested and working on Firefox 70, Edge 42, and Chrome 78.
 
@@ -10,11 +10,15 @@ Tested and working on Firefox 70, Edge 42, and Chrome 78.
 
 ## Features
 
+The latest release demo is `index.htm`, which has all external files (except images) packed into it.
+You can copy `index.htm` along with the `res/` folder to run it on nearly any web browser.
+
 - Adjustable vital sign values
 - Selectable waveforms
 - Animated waves
 - Current date and time in `HH`:`MM`:`SS` format
 - Easily extendable
+
 - Simple UI
 - Cross-platform, web app
 - Works within current web browsers
@@ -26,12 +30,14 @@ Tested and working on Firefox 70, Edge 42, and Chrome 78.
 - Pacemaker (Lead II)
 - VFib (Lead II)
 - AFib (Lead I)
+
 - Normal Pleth
 - Small/Weak (Pleth)
 - Large/Bounding (Pleth)
 - Pulsus Alternase (Pleth)
 - No Dicrotic Notch (Pleth)
 - Chaotic (Pleth)
+
 - Basic Respiration
 - Normal Artline
 
