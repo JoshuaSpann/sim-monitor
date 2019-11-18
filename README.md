@@ -12,6 +12,7 @@ Tested and working on Firefox 70.0.1, Edge 42.17134.1.0, and Chrome 78.0.3904.97
 - Adjustable vital sign values
 - Selectable waveforms
 - Animated waves
+- Current date and time in `HH`:`MM`:`SS` format
 - Easily extendable
 - Simple UI
 - Cross-platform, web app
