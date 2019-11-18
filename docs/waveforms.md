@@ -35,6 +35,16 @@ Currently the included waveforms are:
 
 ## Waveforms API
 
+### Default Waveforms API
+
+The default waveforms included with sim-monitor are sparse but are accessible via the `Waveforms` object.
+`Waveforms` is divided into sub-categories like heart rhythm, oxygen, etc.
+The current categories from `Waveforms` are:
+- `Hr`: The heart rhythm waveforms (Sinus, VFib, AFib, etc)
+- `O2`: The pleth/oxygen waveforms (Normal, Bounding, Chaotic, etc)
+- `Rr`: The respiratory waveforms
+- `Bp`: The art-line/blood pressure waveforms
+
 ### Fields and Properties
 
 - `amplitude`: Controls the amplitude of the wave. It multiplies the y-axis values.
@@ -121,9 +131,11 @@ There are 2 mandatory sub-properties and the rest are optional:
 #### The `linear` Property
 
 The `linear` prop controls whether to render the waveform in a linear-graph style or not.
-By default, all waveforms are assumed to have a curve to them.
+By default, all waveforms are assumed to have a curve to them:
+
 ![A waveform with the default curve assigned](img/waveform.linear=false.png)
 
 The default value is to smooth the x and y curve control points by a value of `2`.
-If `linear` is set, then it accomplishes the same thing as setting `curve.smooth` equal to `0`.
+If `linear` is set, then it accomplishes the same thing as setting `curve.smooth` equal to `0`:
+
 ![The same waveform but with linear set to true](img/waveform.linear=true.png)
