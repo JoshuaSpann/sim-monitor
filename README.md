@@ -1,9 +1,10 @@
-# ![Sim Monitor Logo](docs/img/ico.png) Sim-Monitor
+# <image alt='Sim Monitor Logo' src='docs/img/ico.png' height='1em' /> Sim-Monitor
 
 A customizable, web-based simulation monitor for vital signs.
 It is built to run with HTML5, CSS3, and ECMAScript 5.
+You can view the demo [here](https://www.joshuaspann.com/sim-monitor)!
 
-Tested and working on Firefox 70.0.1, Edge 42.17134.1.0, and Chrome 78.0.3904.97
+Tested and working on Firefox 70, Edge 42, and Chrome 78.
 
 ![Sim Monitor](docs/img/screen-main.png)
 

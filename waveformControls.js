@@ -8,9 +8,6 @@ populateWaveformDropdown(selectO2, Waveforms.O2, document.querySelector("[wav='o
 populateWaveformDropdown(selectRr, Waveforms.Rr, document.querySelector("[wav='rr']"))
 populateWaveformDropdown(selectBp, Waveforms.Bp, document.querySelector("[wav='bp']"))
 
-//animateWaveformContext(Waveforms.Rr, document.querySelector("[wav='rr']"))
-//animateWaveformContext(Waveforms.Bp, document.querySelector("[wav='bp']"))
-
 // [{canvas, setIntervalHandleId}]
 var waveformAnimationQueue = [];
 
@@ -176,7 +173,6 @@ function getCalculatedStrengthValues(waveform, curveTargetXY) {
  * Assigns select options from HR waveform with optional canvas to control
  **/
 function populateWaveformDropdown(select, waveforms, canvas) {
-//function populateHrWaveformDropdown(select, canvas) {
 	if (!canvas) {
 		canvas = document.querySelector("[wav]")
 	}
